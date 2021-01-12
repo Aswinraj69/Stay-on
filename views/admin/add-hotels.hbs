@@ -1,0 +1,96 @@
+<div class="dashboard-wrapper mt-5">
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+
+                    <h2 class="pageheader-title">Hotels</h2>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <h5 class="card-header"></h5>
+                <div class="card-body">
+                    <form action="/admin/addhotels" method="post" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Email</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="username" type="email" required="" data-parsley-type="email"
+                                    placeholder="username" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Password</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="password" type="password" required="" placeholder="Password"
+                                    class="form-control">
+                                <input name="joined" type="hidden" value="{{date}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Hotel Name</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="hotelname" type="text" required="" placeholder="Hotel Name"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Located City</label>
+                            <div class="col-9 col-lg-10">
+                                <select name="city" id="city" class="form-control" required aria-placeholder="City">
+                                    <option selected="selected" disabled="">City</option>
+                                    {{#each city}}
+                                      <option value="{{this.city}}">{{this.city}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Hotel Address</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="hoteladdress" type="text" required="" placeholder="Hotel address"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Mobile</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="mobile" type="tel" required="" placeholder="Mobile" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Image</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="image" type="file" required="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row pt-2 pt-sm-5 mt-1">
+                            <div class="col-sm-6 pb-2 pb-sm-4 pb-lg-0 pr-0">
+                                <label class="be-checkbox custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input"><span
+                                        class="custom-control-label">Remember me</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-6 pl-0">
+                                <p class="text-right">
+                                    <button type="submit" class="btn btn-space btn-primary">Create</button>
+                                    <a href="/admin/hotels" class="btn btn-space btn-secondary">Cancel</a>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

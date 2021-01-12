@@ -1,0 +1,50 @@
+<div class="dashboard-wrapper mt-5">
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+
+                    <h2 class="pageheader-title">City</h2>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link"></a></li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <h5 class="card-header"></h5>
+                <div class="card-body">
+                    <form action="/admin/editcity/{{city._id}}" method="post" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">City</label>
+                            <div class="col-9 col-lg-10">
+                                <input  name="city" type="text"  placeholder="city" class="form-control" value="{{city.city}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Image</label>
+                            <div class="col-9 col-lg-10">
+                                <img src="/hotel/city-images/{{city._id}}.jpg" alt="" style="width: 100px; height:100px;">
+                                <input name="image" type="file"  placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 pl-0">
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-space btn-primary">Create</button>
+                                <a href="/admin/city" class="btn btn-space btn-secondary">Cancel</a>
+                            </p>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

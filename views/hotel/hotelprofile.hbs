@@ -1,0 +1,197 @@
+<div class="dashboard-wrapper">
+    <div class="influence-profile">
+        <div class="container-fluid dashboard-content ">
+            <!-- ============================================================== -->
+            <!-- pageheader -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h3 class="mb-2">Influencer Profile </h3>
+                        <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit
+                            amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="hotel/profile"
+                                            class="breadcrumb-link">Profile</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end pageheader -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <!-- ============================================================== -->
+                <!-- profile -->
+                <!-- ============================================================== -->
+                <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
+                    <!-- ============================================================== -->
+                    <!-- card profile -->
+                    <!-- ============================================================== -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="user-avatar text-center d-block">
+                                <img src="/hotel/hotel-images/{{hotel._id}}.jpg" alt="User Avatar"
+                                    class="rounded-circle user-avatar-xxl">
+                            </div>
+                            <div class="text-center">
+                                <h2 class="font-24 mb-0">{{hotel.hotelname}}</h2>
+                                <p>{{profile.location}}</p>
+                                <a href="/hotel/editprofile/{{hotel._id}}" class="badge badge-dark">Edit Profile</a>
+                            </div>
+                        </div>
+                        <div class="card-body border-top">
+                            <h3 class="font-16">Contact Information</h3>
+                            <div class="">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{hotel.username}}
+                                    </li>
+                                    <li class="mb-2"><i class="fas fa-fw fa-phone mr-2"></i>{{hotel.mobile}}</li>
+                                    <li class="mb-0"><i class="fas fa-fw fa-home mr-2"></i>{{hotel.hoteladdress}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body border-top">
+                            <h3 class="font-16">Rating</h3>
+                            <h1 class="mb-0">4.8</h1>
+                            <div class="rating-star">
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <p class="d-inline-block text-dark">14 Reviews </p>
+                            </div>
+                        </div>
+                        <div class="card-body border-top">
+                            <h3 class="font-16">Social Channels</h3>
+                            <div class="">
+                                <ul class="mb-0 list-unstyled">
+                                    <li class="mb-1"><a href="{{hotel.fblink}}"><i
+                                                class="fab fa-fw fa-facebook-square mr-1 facebook-color"></i>{{hotel.fblink}}</a>
+                                    </li>
+
+                                    <li class="mb-1"><a href="{{hotel.instalink}}"><i
+                                                class="fab fa-fw fa-instagram mr-1 instagram-color"></i>{{hotel.instalink}}</a>
+                                    </li>
+
+
+                                    <li class="mb-1"><a href="{{hotel.youtubelink}}"><i
+                                                class="fab fa-fw fa-youtube mr-1 youtube-color"></i>{{hotel.youtubelink}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body border-top">
+                            <h3 class="font-16">Description</h3>
+                            <div>
+                                <p>{{hotel.about}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end card profile -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- end profile -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- campaign data -->
+                <!-- ============================================================== -->
+                <div class="col-xl-9 col-lg-9 col-md-7 col-sm-12 col-12">
+                    <!-- ============================================================== -->
+                    <!-- campaign tab one -->
+                    <!-- ============================================================== -->
+                    <div class="influence-profile-content pills-regular">
+
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-campaign" role="tabpanel"
+                                aria-labelledby="pills-campaign-tab">
+
+                                <div class="section-block">
+                                    <h3 class="section-title">Rooms </h3>
+                                </div>
+                                <div class="row">
+                                    {{#each profile}}
+                                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <!-- .card -->
+                                        <div class="card card-figure">
+                                            <!-- .card-figure -->
+                                            <figure class="figure">
+                                                <!-- .figure-img -->
+                                                <div class="figure-img">
+                                                    <img class="img-fluid" src="/hotel/rooms-images/{{this._id}}1.jpg"
+                                                        alt="Card image cap" style="width: 250px; height:200px;">
+                                                    <div class="figure-action">
+                                                        <a href="/hotel/rooms" class="btn btn-block btn-sm btn-primary">View</a>
+                                                    </div>
+                                                </div>
+                                                <!-- /.figure-img -->
+                                                <!-- .figure-caption -->
+                                                <figcaption class="figure-caption">
+                                                    <h6 class="figure-title"><a href="/hotel/rooms">{{this.roomname}}</a> </h6>
+                                                    <p class="text-muted mb-0"> {{this.roomprice}}</p>
+                                                    <p class="text-muted mb-0"> {{this.roomfeatures}}</p>
+                                                </figcaption>
+                                                <!-- /.figure-caption -->
+                                            </figure>
+                                            <!-- /.card-figure -->
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
+                                    {{/each}}
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end campaign tab one -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- end campaign data -->
+                <!-- ============================================================== -->
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end content -->
+    <!-- ============================================================== -->
+    <div class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    Copyright © 2018 Concept. All rights reserved. Dashboard by DesignX
+
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="text-md-right footer-links d-none d-sm-block">
+                        <a href="javascript: void(0);">About</a>
+                        <a href="javascript: void(0);">Support</a>
+                        <a href="javascript: void(0);">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end footer -->
+    <!-- ============================================================== -->
+</div>

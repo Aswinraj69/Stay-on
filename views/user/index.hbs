@@ -1,0 +1,465 @@
+<section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1>Book your Room</h1>
+          <h2>A hotel room all to myself is my idea of a good time.</h2>
+          <div>
+            <a href="#services" class="btn-get-started scrollto">Get Started</a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img">
+          <img src="/user/files/img/resort.jpg" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= Clients Section ======= -->
+    <section id="clients" class="clients clients">
+      <div class="container" style="height:300px">
+
+        <div class="s002">
+          <form>
+
+            <div class="inner-form">
+              <div class="input-field first-wrap">
+                <div class="icon-wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z">
+                    </path>
+                  </svg>
+                </div>
+                <input id="search" type="text" placeholder="What are you looking for?" />
+              </div>
+              <div class="input-field second-wrap">
+                <div class="icon-wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z">
+                    </path>
+                  </svg>
+                </div>
+                <input class="datepicker" id="depart" type="text" placeholder="29 Aug 2018" />
+              </div>
+              <div class="input-field third-wrap">
+                <div class="icon-wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z">
+                    </path>
+                  </svg>
+                </div>
+                <input class="datepicker" id="return" type="text" placeholder="30 Aug 2018" />
+              </div>
+              <div class="input-field fouth-wrap">
+                <div class="icon-wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                    </path>
+                  </svg>
+                </div>
+                <select data-trigger="" name="choices-single-defaul">
+                  <option placeholder="">2 Adults</option>
+                  <option>3 Adults</option>
+                  <option>4 Adults</option>
+                  <option>5 Adults</option>
+                </select>
+              </div>
+              <div class="input-field fifth-wrap">
+                <button class="btn-search" type="button">SEARCH</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </section><!-- End Clients Section -->
+
+    <!-- ======= About Us Section ======= -->
+
+
+    <!-- ======= Counts Section ======= -->
+
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Popular Destination</h2>
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+    <section id="clients" class="clients clients">
+      <div class="container">
+        <div class="row">
+          {{#each cities}}
+          <div class="col-md-1">
+            <div class="card" style="display: contents ;">
+              <a href=""><img class="card-img-top img-fluid" src="/hotel/city-images/{{this._id}}.jpg" alt="Card image cap" style="width: 75px;height: 77px;"></a>
+              <div class=" ">
+                <center>
+                  <p style="font-size: 12px;">{{this.city}}</p>
+                </center>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+
+    </section>
+
+    <!-- ======= More Services Section ======= -->
+    <section id="more-services">
+      
+    </section><!-- End More Services Section -->
+
+    <!-- ======= Features Section ======= -->
+    <section id="features" class="features">
+
+
+      <div class="section-title">
+        <h2>Explore</h2>
+
+        <div class="container-fluid dashboard-content ">
+          <!-- ============================================================== -->
+          <!-- pageheader  -->
+          <!-- ============================================================== -->
+
+          <!-- ============================================================== -->
+          <!-- end pageheader  -->
+          <!-- ============================================================== -->
+
+          <div class="container">
+            <div class="row">
+              {{#each hotels}}
+              <div class="col-md-4">
+                <div class="product-thumbnail" style="border: 1px solid #e6e6f2;">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/hotel/hotel-images/{{this._id}}.jpg" alt="" class="img-fluid"
+                        style="height: 195px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      
+                      <h3 class="product-title">{{this.hotelname}} <hr></h3>
+                      <div><p class="product-title badge badge-info"><i class="icofont-location-pin"></i>{{this.city}}</p></div>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+                     
+                    </div>
+                     <a href="/rooms/{{this._id}}" class="btn btn-primary text-white">View</a>
+                  </div>
+                </div>
+              </div>
+              {{/each}}
+              
+            </div>
+          </div>
+
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end footer -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+
+      </div>
+
+      <div class="row">
+
+      </div>
+
+
+    </section><!-- End Features Section -->
+    <section id="features" class="features">
+
+
+      <div class="section-title">
+        <h2>Luxuries</h2>
+
+        <div class="container-fluid dashboard-content ">
+          <!-- ============================================================== -->
+          <!-- pageheader  -->
+          <!-- ============================================================== -->
+
+          <!-- ============================================================== -->
+          <!-- end pageheader  -->
+          <!-- ============================================================== -->
+
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="product-thumbnail">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/user/assets/images/eco-product-img-1.png" alt="" class="img-fluid"
+                        style="height: 223px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      <h3 class="product-title">T-Shirt Product Title</h3>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="product-thumbnail">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/user/assets/images/produc-2.jpg" alt="" class="img-fluid"
+                        style="height: 223px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      <h3 class="product-title">T-Shirt Product Title</h3>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="product-thumbnail">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/user/assets/images/product-3.jpg" alt="" class="img-fluid"
+                        style="height: 223px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      <h3 class="product-title">T-Shirt Product Title</h3>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="product-thumbnail">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/user/assets/images/product-4.jpg" alt="" class="img-fluid"
+                        style="height: 223px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      <h3 class="product-title">T-Shirt Product Title</h3>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="product-thumbnail">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/user/assets/images/product-3.jpg" alt="" class="img-fluid"
+                        style="height: 223px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      <h3 class="product-title">T-Shirt Product Title</h3>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="product-thumbnail">
+                  <div class="product-img-head">
+                    <div class="product-img">
+                      <img src="/user/assets/images/eco-product-img-1.png" alt="" class="img-fluid"
+                        style="height: 223px;    width: 348px;">
+                    </div>
+                  </div>
+                  <div class="product-content">
+                    <div class="product-content-head">
+                      <h3 class="product-title">T-Shirt Product Title</h3>
+                      <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end footer -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+
+      </div>
+
+      <div class="row">
+
+      </div>
+
+
+    </section>
+    
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Contact Us</h2>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="contact-about">
+              <h3>TRAVELIX</h3>
+              <p>TRAVELIX provides online Hotel Bookings of hotels in India and worldwide. Book cheap, budget and luxury hotels at great prices on best hotel booking site.</p>
+              <div class="social-links">
+                <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
+                <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
+                <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mt-4 mt-md-0">
+            <div class="info">
+              <div>
+                <i class="ri-map-pin-line"></i>
+                <p>kollam<br>Kerala,India, 691001</p>
+              </div>
+
+              <div>
+                <i class="ri-mail-send-line"></i>
+                <p>travelix123@.com</p>
+              </div>
+
+              <div>
+                <i class="ri-phone-line"></i>
+                <p>9567361815</p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-lg-5 col-md-12">
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <div class="form-group">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
+                  data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                <div class="validate"></div>
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
+                  data-rule="email" data-msg="Please enter a valid email" />
+                <div class="validate"></div>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
+                  data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                <div class="validate"></div>
+              </div>
+              <div class="form-group">
+                <textarea class="form-control" name="message" rows="5" data-rule="required"
+                  data-msg="Please write something for us" placeholder="Message"></textarea>
+                <div class="validate"></div>
+              </div>
+              <div class="mb-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->

@@ -1,0 +1,110 @@
+<section id="services" class="services">
+    <div class="container mt-5">
+
+        <div class="section-title">
+            <h2></h2>
+
+        </div>
+
+
+
+    </div>
+</section>
+
+<section class="bg-light">
+    <div class="container ">
+
+
+
+        <!-- ============================================================== -->
+        <!-- end pageheader  -->
+        <!-- ============================================================== -->
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header p-4">
+                    <a class="pt-2 d-inline-block" href="/">Home</a>
+
+                    <div class="float-right">
+                        <h3 class="mb-0">Confirmation</h3>
+                        Date: {{today}}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <h5 class="mb-3">From:</h5>
+                            <h3 class="text-dark mb-1">{{hotelDetails.hotelname}}</h3>
+                            <div>Email: {{hotelDetails.username}}</div>
+                            <div>Phone: {{hotelDetails.mobile}}</div>
+                            <div>Address: {{hotelDetails.hoteladdress}}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <h5 class="mb-3">To:</h5>
+                            <h3 class="text-dark mb-1">{{userdetails.name}}</h3>
+                            <div>Email: {{userdetails.username}}</div>
+                            <div>Phone: {{userdetails.mobile}}</div>
+                        </div>
+                    </div>
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped mb-5">
+                            <thead>
+                                <tr>
+                                    <th>For Booking</th>
+                                    <th>Guest</th>
+                                    <th class="right">Room Charge</th>
+                                    <th class="right">Check In</th>
+                                    <th class="right">Check Out</th>
+                                    <th class="center">Total</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                
+                                <tr>  
+                                    <td class="left strong">{{room.roomname}}</td>
+                                    <td class="left">{{booked.people}}</td>
+                                    <td class="right">{{room.roomprice}}</td>
+                                    <td class="left">{{booked.checkin}}</td>
+                                    <td class="left">{{booked.checkout}}</td>
+                                    
+                                    <td class="center">{{total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5">
+                        </div>
+                        <div class="col-lg-4 col-sm-5 ml-auto">
+                            <table class="table table-clear">
+                                <tbody>
+                                    <tr>
+                                        <td class="left">
+                                            <strong class="text-dark">Subtotal</strong>
+                                        </td>
+                                        <td class="right">{{total}}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="left">
+                                            <strong class="text-dark"></strong>
+                                        </td>
+                                        <td class="right">
+                                            <button class="text-white  btn btn-danger">Book</button>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+
+    </div>
+</section>

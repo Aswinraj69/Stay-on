@@ -1,0 +1,11 @@
+module.exports={
+    ADMIN_COLLECTION:'admin',
+    HOTELS_COLLECTION:'hotels',
+    CITY_COLLECTION:'city',
+    ROOM_COLLECTION:'rooms',
+    USER_COLLECTION:'user',
+    FOOD_CATEGORY:'food_category',
+    FOOD_COLLECTION:'food',
+    BOOKING_COLLECTION:'book',
+    HOTELFOOD_COLLECTION:'hotelfood'
+}

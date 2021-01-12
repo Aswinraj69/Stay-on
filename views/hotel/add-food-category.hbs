@@ -1,0 +1,50 @@
+<div class="dashboard-wrapper mt-5">
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+
+                    <h2 class="pageheader-title">Add Rooms</h2>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <h5 class="card-header"></h5>
+                <div class="card-body">
+                    <form action="/hotel/addfoodcategory" method="post">
+                
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Category</label>
+                            <div class="col-9 col-lg-10">
+                                <input  name="category" type="text" required=""
+                                    placeholder="Category" class="form-control">
+                                     <input  name="hid" type="hidden" value="{{hotel._id}}">
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="row pt-2 pt-sm-5 mt-1">
+                            
+                            <div class="col-sm-6 pl-0">
+                                <p class="text-right">
+                                    <button type="submit" class="btn btn-space btn-primary">Create</button>
+                                    <a href="/hotel/rooms" class="btn btn-space btn-secondary">Cancel</a>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

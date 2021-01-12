@@ -1,0 +1,124 @@
+<div class="dashboard-wrapper mt-5">
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+
+                    <h2 class="pageheader-title">Add Rooms</h2>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <h5 class="card-header"></h5>
+                <div class="card-body">
+                    <form action="/hotel/addrooms" method="post" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Image1</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="image1" type="file" required="" placeholder="" class="form-control">
+                                <input type="hidden" name="hid" value="{{hotel._id}}">
+                            </div>
+                        </div>
+                         <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Image2</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="image2" type="file" required="" placeholder="" class="form-control">
+                                
+                            </div>
+                        </div>
+                         <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Image3</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="image3" type="file" required="" placeholder="" class="form-control">
+                                
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Room Name</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="roomname" type="text" required="" placeholder="Room Name"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right"> Available Room</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="availableroom" type="text" required="" placeholder="Rooms available"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Room Price</label>
+                            <div class="col-9 col-lg-10">
+                                <input type="text" name="roomprice" required="" placeholder="Room price"
+                                    class="form-control">
+                                <input type="hidden" name="city" value="{{hotel.city}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Room Features</label>
+                            <div class="col-9 col-lg-10 mt-2">
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features" value="AC"> Ac
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features" value="Wifi"
+                                    class="ml-2"> Wifi
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Fire-Extinguisher" class="ml-2"> Fire-Extinguisher
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features" value="First Aid"
+                                    class="ml-2"> First Aid
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="24/7 Checkin" class="ml-2"> 24/7 Checkin
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="refrigirator" class="ml-2"> Refrigirator
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Queen Sized Bed" class="ml-2"> Queen Sized Bed
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features" value="Kitchen"
+                                    class="ml-2"> Kitchen
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Water Purifier" class="ml-2"> Water Purifier
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features" value="Geyser"
+                                    class="ml-2"> Geyser
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Modern Wardrobe" class="ml-2"> Modern Wardrobe
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Parking Facility" class="ml-2"> Parking Facility
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Card Payment" class="ml-2"> Card Payment
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features" value="Elevator"
+                                    class="ml-2"> Elevator
+                                <input name="roomfeatures" type="checkbox" placeholder="Room features"
+                                    value="Power backup" class="ml-2">Power backup
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3 col-lg-2 col-form-label text-right">Category</label>
+                            <div class="col-9 col-lg-10">
+                                <input name="category" type="text" required="" placeholder="Category"
+                                    class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row pt-2 pt-sm-5 mt-1">
+
+                            <div class="col-sm-6 pl-0">
+                                <p class="text-right">
+                                    <button type="submit" class="btn btn-space btn-primary">Create</button>
+                                    <a href="/hotel/rooms" class="btn btn-space btn-secondary">Cancel</a>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

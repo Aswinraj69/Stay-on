@@ -1,0 +1,88 @@
+<div class="dashboard-wrapper">
+    <div class="influence-profile">
+        <div class="container-fluid dashboard-content ">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h3 class="mb-2">Influencer Profile </h3>
+                        <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit
+                            amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="hotel/profile" class="breadcrumb-link">Profile</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="section-block" id="basicform">
+                        <h3 class="section-title">Edit Profile</h3>
+                       
+                    </div>
+                    <div class="card">
+                        
+                        <div class="card-body">
+                            <form action="/hotel/editprofile/{{hotelDetails._id}}" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label  class="col-form-label">Hotel Name</label>
+                                    <input  type="text" class="form-control" name="hotelname" value="{{hotelDetails.hotelname}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <input  type="text" placeholder="City/Town"
+                                        class="form-control" name="city" value="{{hotelDetails.city}}">
+                                   
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Email</label>
+                                    <input  type="email" class="form-control" placeholder="name@gmail.com" name="username" value="{{hotelDetails.username}}">
+                                </div>
+                                <div class="form-group">
+                                    <label >Address</label>
+                                    <input  type="text" placeholder="Enter Your Address" name="hoteladdress" value="{{hotelDetails.hoteladdress}}"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Contact</label>
+                                    <input  type="tel" class="form-control" name="mobile" value="{{hotelDetails.mobile}}">
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Facebook Link</label>
+                                    <input  type="text" class="form-control" name="fblink" value="{{hotelDetails.fblink}}">
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Instagram Link</label>
+                                    <input  type="text" class="form-control" name="instalink" value="{{hotelDetails.instalink}}">
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Youtube Link</label>
+                                    <input  type="text" class="form-control" name="youtubelink" value="{{hotelDetails.youtubelink}}">
+                                </div>
+                                <div class="form-group">
+                                    <label >About</label>
+                                    <textarea class="form-control" rows="3" name="about">{{hotelDetails.about}}</textarea>
+                                </div>
+                                <div class=" mb-3">
+                                     <label  class="col-form-label">Image</label>
+                                     <img style="width:100px;height:100px;" src="/hotel/hotel-images/{{hotelDetails._id}}.jpg" alt="Upload Profile">
+                                    <input type="file" name="image">
+                                  
+                                </div>
+                                <div>
+                                    <button class="btn btn-success">Submit</button>
+                                   <a href="/hotel/profile/{{hotelDetails._id}}" class="btn btn-dark">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
