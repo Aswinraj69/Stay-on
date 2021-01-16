@@ -2,7 +2,7 @@
     <div class="container mt-5">
 
         <div class="section-title">
-            <h2></h2>
+            <h2>{{hotelDetails.hotelname}}</h2>
 
         </div>
 
@@ -92,7 +92,7 @@
                                             <strong class="text-dark"></strong>
                                         </td>
                                         <td class="right">
-                                            <button class="text-white  btn btn-danger">Book</button>
+                                            <a class="text-white  btn btn-danger" onclick="payment('{{userdetails._id}}')">Book</a>
                                         </td>
 
                                     </tr>
@@ -107,4 +107,5 @@
 
 
     </div>
+   
 </section>

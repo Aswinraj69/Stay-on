@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var userHelper=require('../helpers/user-helper')
-var hotelHelper=require('../helpers/hotel-helpers')
-var url=require('url')
 const verifyLogin=(req,res,next)=>{
     if(req.session.userLoggedIn){
         next()
@@ -14,7 +12,6 @@ const verifyLogin=(req,res,next)=>{
 /* GET users listing. */
 router.get('/', function(req, res, next) {
     userHelper.getCity().then((response)=>{
-        
         res.render('user/index',{user:true,userdetails:req.session.user,cities:response.city,hotels:response.hotel});
     })
     
@@ -90,16 +87,19 @@ router.post('/booking-room', verifyLogin,function(req,res,next){
    })
 })
 router.get('/confirm-booking', verifyLogin, function(req,res,next){
+    
     userHelper.getBooking(req.session.user._id).then(async(response)=>{
         let people=parseInt(response.bookingdetails.people)
         let roomprice=parseInt(response.roomdetails.roomprice)
         let total = people*roomprice
-        let foodDetails=await userHelper.getfoodDetails(req.session.user._id)
+        
+         let foodDetails=await userHelper.getfoodDetails(req.session.user._id)
         var today=new Date()
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd +'/'+ mm +'/'+ yyyy;
+        req.session.total=total
         res.render('user/confirm-booking',{user:true,userdetails:req.session.user,booked:response.bookingdetails,
             hotelDetails:response.hoteldetails,today,
             room:response.roomdetails,total})
@@ -107,10 +107,72 @@ router.get('/confirm-booking', verifyLogin, function(req,res,next){
     
 })
 
-router.post('/searchfood',function(req,res){
-   userHelper.getSearchFood(req.body).then((foods)=>{
-    req.session.foods=foods
-   res.json(foods)
-   }) 
-  })
+router.get('/razorpay/:id',verifyLogin,(req,res,next)=>{
+    console.log(req.params.id);
+    userHelper.createPaymentOrder(req.params.id,req.session.total).then((response)=>{
+        let user=req.session.user
+        res.json({response:response,user:user})
+    })
+})
+
+router.post('/verify-payment',verifyLogin,(req,res,next)=>{
+    userHelper.verifyPayment(req.body).then(()=>{
+        userHelper.changePaidStatus(req.body['order[receipt]']).then(()=>{
+            
+            res.json({status:true})
+        })
+    }).catch((err)=>{
+        res.json({status:false})
+    })
+})
+//user-profile
+router.post('/editprofile/:id',verifyLogin,function(req,res){
+    userHelper.updateProfile(req.params.id,req.body).then((result)=>{
+        req.session.user=result
+        if(req.files){
+            let image=req.files.image
+            image.mv('./public/user/user-images/'+req.params.id+'.jpg')
+          }
+          res.redirect('/profile/'+req.params.id)
+    })
+})
+
+// router.post('/searchfood',function(req,res){
+//    userHelper.getSearchFood(req.body).then((foods)=>{
+//     req.session.foods=foods
+//    res.json(foods)
+//    }) 
+//   })
+
+//user profile
+router.get('/profile/:id',verifyLogin,(req,res,next)=>{
+    userHelper.getBooking(req.params.id).then((response)=>{
+        let people=parseInt(response.bookingdetails.people)
+        let roomprice=parseInt(response.roomdetails.roomprice)
+        let total = people*roomprice
+        var today=new Date()
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = dd +'/'+ mm +'/'+ yyyy;
+        req.session.total=total
+        res.render('user/profile',{user:true,userdetails:req.session.user,booked:response.bookingdetails,
+            hotelDetails:response.hoteldetails,today,
+            room:response.roomdetails,total})
+    }).catch((err)=>{
+        res.render('user/profile',{user:true,userdetails:req.session.user})
+    })
+    
+})
+
+//cancl booking
+router.get('/cancel-booking/:id',verifyLogin,(req,res,next)=>{
+    userHelper.cancelBooking(req.params.id).then(()=>{
+        res.json({status:true})
+    })
+   
+})
+router.get('/edit-user-profile/:id',verifyLogin,(req,res,next)=>{
+    res.render('user/edit-profile',{user:true,userdetails:req.session.user})
+})
 module.exports = router;

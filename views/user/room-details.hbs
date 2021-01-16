@@ -16,10 +16,10 @@
 
 
         <div class=" col-md-12">
-            <div class="row">
+            <form action="/booking-room" method="POST" enctype="multipart/form-data">
+                <div class="row">
 
-                <div class="col-md-6">
-                    <form action="/booking-room" method="POST" enctype="multipart/form-data">
+                    <div class="col-md-6">
                         <div class="product-slider" style="padding:0px">
                             <div id="productslider-1" class="product-carousel carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
@@ -58,76 +58,83 @@
                                 </a>
                             </div>
                         </div>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pl-xl-0 pl-lg-0 pl-md-0 border-left m-b-30">
-                    <div class="product-details">
-                        <div class="border-bottom pb-3 mb-3">
-                            <h2 class="mb-3">{{roomdetails.roomname}} <a href=""><span
-                                        style="font-size:15px;float: right ;" class=""><i
-                                            class="icofont-location-pin">view on Map</i></span></a></h2>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="product-details">
+                            <div class="border-bottom pb-3 mb-3">
+                                <h2 class="mb-3">{{roomdetails.roomname}} <a href=""><span
+                                            style="font-size:15px;float: right ;" class=""><i
+                                                class="icofont-location-pin">view on Map</i></span></a></h2>
 
-                            <div class="product-rating d-inline-block float-right">
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                            </div>
-                            <h3 class="mb-0 text-primary">{{roomdetails.roomprice}}</h3>
-                        </div>
-                        <div class="product-colors border-bottom">
-                            <h4>No of Peoples</h4>
-                            <select class="form-control col-md-3" name="people" required>
-                                <option value="" selected="selected" disabled>--select--</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-
-                            </select>
-                            <div class="row mt-4">
-                                <div class="col-md-3">
-                                    <h5>Check <i class="icofont-long-arrow-down"></i></h5>
-                                    <input type="date" name="checkin" style="margin-left:1px" required="">
+                                <div class="product-rating d-inline-block float-right">
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
                                 </div>
+                                <h3 class="mb-0 text-primary">{{roomdetails.roomprice}}</h3>
+                            </div>
+                            <div class="product-colors border-bottom">
+                                <h4>No of Peoples</h4>
+                                <select class="form-control col-md-3" name="people" required>
+                                    <option value="" selected="selected" disabled>--select--</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+
+                                </select>
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        <h5>Check <i class="icofont-long-arrow-down"></i></h5>
+                                        <input type="date" name="checkin" style="margin-left:1px" required="">
+                                    </div>
 
 
-                                <div class="col-md-3" style="margin-left:100px ;">
-                                    <h5 style="margin-left:50px;">Check<i class="icofont-long-arrow-up"></i></h5>
-                                    <input type="date" name="checkout" style=text-align:right; required="">
+                                    <div class="col-md-3" style="margin-left:100px ;">
+                                        <h5 style="margin-left:50px;">Check<i class="icofont-long-arrow-up"></i></h5>
+                                        <input type="date" name="checkout" style=text-align:right; required="">
+
+                                    </div>
 
                                 </div>
+                            </div>
+
+                            <div class="product-description">
+                                <h4 class="mb-1">Descriptions</h4>
+                                <br>
+                                <p>{{hoteldetails.about}}</p>
+                                <p>for more details:<a href=""> <i class="icofont-phone"></i></a></p>
+                                <button class="btn btn-primary btn-block btn-lg">Book</button>
 
                             </div>
-                        </div>
-
-                        <div class="product-description">
-                            <h4 class="mb-1">Descriptions</h4>
-                            <br>
-                            <p>{{hoteldetails.about}}</p>
-                            <p>for more details:<a href=""> <i class="icofont-phone"></i></a></p>
-                            <button class="btn btn-primary btn-block btn-lg">Book</button>
-
                         </div>
                     </div>
-                </div>
 
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 m-b-60">
-                    <h4 class="text-primary text-center">Room</h4>
-                    <div class="col-md-12 p-3">
-                            <div id="carouselExampleControls" class="carousel slide " data-ride="carousel">
+                    <div class="col-md-12">
+                        <h4 class=" text-center mt-4">Room</h4>
+                        <div class=" p-3 gallery">
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}1.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}1.jpg" alt="First slide"></a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}2.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}2.jpg" alt="First slide"></a>
+                           <a href="/hotel/rooms-images/{{roomdetails._id}}3.jpg" data-lightbox="mygallery" ><img class="" src="/hotel/rooms-images/{{roomdetails._id}}3.jpg" alt="First slide"></a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}4.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}4.jpg" alt="First slide"></a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}5.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}5.jpg" alt="First slide"></a>
+                           
+                                      
+                            {{!-- <div id="carouselExampleControls" class="carousel slide " data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="d-block w-100" src="/hotel/rooms-images/{{roomdetails._id}}1.jpg" style="height: 400px;"
-                                            alt="First slide">
+                                        <img class="d-block w-100" src="/hotel/rooms-images/{{roomdetails._id}}1.jpg"
+                                            style="height: 400px;" alt="First slide">
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="/hotel/rooms-images/{{roomdetails._id}}2.jpg"style="height: 400px;"
-                                            alt="Second slide">
+                                        <img class="d-block w-100" src="/hotel/rooms-images/{{roomdetails._id}}2.jpg"
+                                            style="height: 400px;" alt="Second slide">
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="/hotel/rooms-images/{{roomdetails._id}}3.jpg"style="height: 400px;"
-                                            alt="Third slide">
+                                        <img class="d-block w-100" src="/hotel/rooms-images/{{roomdetails._id}}3.jpg"
+                                            style="height: 400px;" alt="Third slide">
                                     </div>
                                 </div>
                                 <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
@@ -138,20 +145,21 @@
                                     data-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span> </a>
-                            </div>
+                            </div> --}}
+
+                        </div>
+
+
+
+
                     </div>
-                    
-                    </form>
+
 
 
                 </div>
-                
+            </form>
+
 
 
         </div>
-
-
-
-
-    </div>
 </section>

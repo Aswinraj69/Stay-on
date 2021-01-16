@@ -2,6 +2,11 @@ const collections=require('../config/collections')
 const db=require('../config/connection')
 const bcrypt=require('bcrypt')
 const objectId=require('mongodb').ObjectID
+const Razorpay=require('razorpay')
+var instance= new Razorpay({
+    key_id:'rzp_test_BTPYMRVQAXV143',
+    key_secret:'T3nUEiAc1nQ8TC5PYYMTZiyw',
+});
 
 module.exports={
     userSignUp:(logDetails)=>{
@@ -79,11 +84,18 @@ module.exports={
             let response={}
             let bookRoom=await db.get().collection(collections.BOOKING_COLLECTION).findOne({uid:uId})
             response.bookingdetails=bookRoom
-            let room=await db.get().collection(collections.ROOM_COLLECTION).findOne({_id:objectId(bookRoom.rid)})
-            response.roomdetails=room
-            let hotel=await db.get().collection(collections.HOTELS_COLLECTION).findOne({_id:objectId(bookRoom.hid)})
-            response.hoteldetails=hotel
-            resolve(response)
+            if(bookRoom){
+                let room=await db.get().collection(collections.ROOM_COLLECTION).findOne({_id:objectId(bookRoom.rid)})
+                response.roomdetails=room
+                let hotel=await db.get().collection(collections.HOTELS_COLLECTION).findOne({_id:objectId(bookRoom.hid)})
+                response.hoteldetails=hotel
+                resolve(response)
+            }else{
+                reject()
+            }
+            
+            
+            
         })
     },
     getfoodDetails:(uId)=>{
@@ -129,6 +141,70 @@ module.exports={
          
         })
     },
+    createPaymentOrder:(userId,total)=>{
+        return new Promise((resolve,reject)=>{
+            totalPaisa=total*100
+            var options ={
+                amount:totalPaisa,
+                currency:"INR",
+                receipt:""+userId
+            };
+            instance.orders.create(options,function(err,order){
+                db.get().collection(collections.PAYMENT_COLLECTION).insertOne(order).then(()=>{
+                    resolve(order)
+                })
+            })
+        })
+    },
+    verifyPayment:(paymentDetails)=>{
+        return new Promise((resolve,reject)=>{
+            const crypto=require('crypto')
+            let hmac = crypto.createHmac('sha256','T3nUEiAc1nQ8TC5PYYMTZiyw')
+            hmac.update(paymentDetails['payment[razorpay_order_id]']+'|'+paymentDetails['payment[razorpay_payment_id]'])
+            hmac=hmac.digest("hex")
+
+            if(hmac===paymentDetails['payment[razorpay_signature]']){
+                resolve()
+            }else{
+                reject()
+            }
+        })
+    },
+    changePaidStatus:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.BOOKING_COLLECTION).updateOne({uid:userId},{$set:{
+                status:"1"
+            }}).then(()=>{
+                resolve()
+            })
+        })
+    },
+    //user-profile update
+    updateProfile:(userId,userdetails)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.USER_COLLECTION).updateOne({_id:objectId(userId)},{$set:{
+                name:userdetails.name,
+                username:userdetails.username,
+                mobile:userdetails.mobile,
+                address:userdetails.address
+            }}).then((result)=>{
+                db.get().collection(collections.USER_COLLECTION).findOne({_id:objectId(userId)}).then((result)=>{
+                    resolve(result)
+                })
+              
+            })
+        })
+    },
+
+    //cancel booking
+    cancelBooking:(bookId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.BOOKING_COLLECTION).removeOne({_id:objectId(bookId)}).then(()=>{
+                resolve()
+            })
+            
+        })
+    }
 
 
 }

@@ -1,0 +1,56 @@
+<section id="services" class="services">
+    <div class="container mt-5">
+
+        <div class="section-title">
+            <h2>Edit Profile</h2>
+
+        </div>
+
+
+
+    </div>
+</section>
+<div class="container">
+
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+        <div class="card " style="margin-bottom:185px;">
+
+            <div class="card-body">
+                <form action="/editprofile/{{userdetails._id}}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-form-label"> Name</label>
+                        <input type="text" class="form-control" name="name" value="{{userdetails.name}}">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="name@gmail.com" name="username"
+                            value="{{userdetails.username}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" placeholder="Enter Your Address" name="address"
+                            value="{{userdetails.address}}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Contact</label>
+                        <input type="tel" class="form-control" name="mobile" value="{{userdetails.mobile}}">
+                    </div>
+                    <div class=" mb-3">
+                        <label class="col-form-label">Image</label>
+                        <img style="width:100px;height:100px;" src="/user/user-images/{{userdetails._id}}.jpg"
+                            alt="Upload Profile">
+                        <input type="file" name="image">
+
+                    </div>
+                    <div>
+                        <button class="btn btn-success">Submit</button>
+                        <a href="/profile/{{userdetails._id}}" class="btn btn-dark">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

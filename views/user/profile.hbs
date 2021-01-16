@@ -1,0 +1,188 @@
+<div class="profile-page  ">
+
+    <div class="page-header header-filter" data-parallax="true"
+        style="background-image:url('https://demos.creative-tim.com/bs3/material-kit/assets/img/examples/city.jpg');">
+    </div>
+    <div class="main  ">
+        <div class="profile-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                        <div class="profile">
+                            <div>
+                                <img src="/user/user-images/{{userdetails._id}}.jpg" alt="Circle Image"
+                                    class="img-raised rounded-circle img-fluid">
+                            </div>
+                            <div class="name">
+                                <h3 class="title">{{userdetails.name}}</h3>
+                                <h6 style="font-family:'Roboto Slab';">
+                                    {{userdetails.username}}<br>
+                                    {{userdetails.mobile}}<br>
+                                    {{userdetails.address}}
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="follow">
+                            <button class="btn btn-fab btn-primary btn-round" rel="tooltip" title=""
+                                data-original-title="Follow this user">
+                                <a href="/edit-user-profile/{{userdetails._id}}" class="text-white"><i class="material-icons">create</i></button></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                        <div class="profile-tabs">
+                            <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#work" role="tab" data-toggle="tab">
+                                        <i class="material-icons">weekend</i> Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#favorite" role="tab" data-toggle="tab">
+                                        <i class="material-icons">fastfood</i> Foods
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content tab-space">
+                    <div class="tab-pane work active show" id="work">
+                        <div class="row">
+                            <div class="col-md-12 ml-auto mr-auto ">
+                                {{#if hotelDetails}}
+                                <h4 class="title">Your Room</h4>
+                                {{else}}
+                                {{/if}}
+                                <div class="row collections">
+                                    <div class="col-md-12">
+                                        {{#if hotelDetails}}
+                                        <table class="table table-borderless bg-light">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Hotel Name</th>
+                                                    <th scope="col">Room Name</th>
+                                                    <th scope="col">Address</th>
+                                                    <th scope="col">Check in</th>
+                                                    <th scope="col">Check out</th>
+                                                    <th scope="col">Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">{{hotelDetails.hotelname}}</th>
+                                                    <td>{{room.roomname}}</td>
+                                                    <td>{{hotelDetails.hoteladdress}}</td>
+                                                    <td>{{booked.checkin}}</td>
+                                                     <td>{{booked.checkout}}</td>
+                                                    <td>{{total}}/-</td>
+                                                    <td><a class="btn btn-sm btn-primary" href="#" id="cancel">Cancel</a></td>
+                                                </tr>
+                                                <marquee scrollamount="20" behavior="alternate" direction="left"style="color:#9c27b0;"; >You can cancel only within 4hours of booking </marquee>
+                                            </tbody>
+                                        </table>
+                                        {{else}}
+                                       <center>
+                                           <h3 class="  mt-5 m" >No bookings ! &#129301;</h3><br>
+                                           <button class="btn btn-info " style="color: #f56942;"><a href="/" class="text-white">Show Rooms</a></button>
+                                       </center>
+                                        
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="display: none;" id="_id">{{booked._id}}</p>
+                            <p style="display: none;" id="userId">{{userdetails._id}}</p>
+
+
+                        </div>
+                    </div>
+                      <div class="tab-content tab-space">
+                          
+                      </div>
+                    <div class="tab-pane text-center gallery" id="favorite">
+                        <div class="row">
+                            <div class="col-md-12 ml-auto mr-auto ">
+                                <h4 class="title">Your Food</h4>
+                                <div class="row collections">
+                                    <div class="col-md-12">
+                                        <table class="table table-borderless bg-light">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Food Name</th>
+                                                    <th scope="col">Restaurant Name</th>
+                                                    <th scope="col">Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">idili</th>
+                                                    <td>casinova</td>
+                                                    <td>200</td>
+                                                    <td><a class="btn btn-sm btn-primary" href="">Cancel</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="cancelmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Cancel</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       Are you sure to cancel booking? &#128527;
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" id="yes">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    
+    setTimeout(function(){
+        $('#cancel').css('display','none')
+    },14400000)
+   
+   $('#cancel').click(function(){
+       $('#cancelmodal').modal('show')
+   })
+   $('#yes').click(function(){
+      let bookId=$('#_id').html()
+      let userId=$('#userId').html()
+      $.ajax({
+          url:'/cancel-booking/'+bookId,
+          method:'get',
+          success:(response)=>{
+              if(response.status){
+                 location.href="/profile/"+userId
+                
+              }else{
+                  location.href="/profile/"+userId
+              }
+          }
+      })
+   })
+</script>
