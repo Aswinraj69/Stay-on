@@ -270,6 +270,9 @@ router.get('/editfood/:id',verifyLogin,function(req,res){
     })
    
   })
-
   
+
+  router.get('/booking/:id',(req,res)=>{
+    res.render('hotel/booking',{hotel:true})
+  })
 module.exports = router;

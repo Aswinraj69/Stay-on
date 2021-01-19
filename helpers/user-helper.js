@@ -98,6 +98,13 @@ module.exports={
             
         })
     },
+    bookedRooms:(uId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ORDER_COLLECTION).find({uid:uId}).toArray().then((result)=>{
+                resolve(result)
+            })
+        })
+    },
     getfoodDetails:(uId)=>{
         return new Promise(async(resolve,reject)=>{
             let foodItems= await db.get().collection(collections.BOOKING_COLLECTION).aggregate([
@@ -164,7 +171,33 @@ module.exports={
             hmac=hmac.digest("hex")
 
             if(hmac===paymentDetails['payment[razorpay_signature]']){
-                resolve()
+                let orders={}
+                let userId=paymentDetails['order[receipt]']
+                console.log(paymentDetails);
+                db.get().collection(collections.BOOKING_COLLECTION).findOne({uid:userId}).then(async(bookdetails)=>{
+                    let user=await db.get().collection(collections.USER_COLLECTION).findOne({_id:objectId(bookdetails.uid)})
+                    let paisa=await parseInt(paymentDetails['order[amount]'])
+                    let total=await paisa/100
+                    orders.uid=userId
+                    orders.customername=user.name
+                    orders.mobile=user.mobile
+                    orders.address=user.address
+                    orders.checkin=bookdetails.checkin
+                    orders.checkout=bookdetails.checkout
+                    orders.people=bookdetails.people
+                    orders.total=total
+                    orders.status="1"
+                    let room=await db.get().collection(collections.ROOM_COLLECTION).findOne({_id:objectId(bookdetails.rid)})
+                    orders.roomname=room.roomname
+                    let hotel=await db.get().collection(collections.HOTELS_COLLECTION).findOne({_id:objectId(bookdetails.hid)})
+                    orders.hotelname=hotel.hotelname
+                    orders.hoteladdress=hotel.hoteladdress
+                    db.get().collection(collections.ORDER_COLLECTION).insertOne(orders).then(()=>{
+                        db.get().collection(collections.BOOKING_COLLECTION).removeOne({uid:userId}).then(()=>{
+                            resolve()
+                        })
+                    })
+                })
             }else{
                 reject()
             }

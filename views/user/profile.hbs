@@ -51,19 +51,21 @@
                     <div class="tab-pane work active show" id="work">
                         <div class="row">
                             <div class="col-md-12 ml-auto mr-auto ">
-                                {{#if hotelDetails}}
+                                {{#if bookings}}
                                 <h4 class="title">Your Room</h4>
                                 {{else}}
                                 {{/if}}
                                 <div class="row collections">
                                     <div class="col-md-12">
-                                        {{#if hotelDetails}}
+                                        {{#if bookings}}
+                                        {{#each bookings}}
                                         <table class="table table-borderless bg-light">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Hotel Name</th>
                                                     <th scope="col">Room Name</th>
                                                     <th scope="col">Address</th>
+                                                    <th scope="col">Guests</th>
                                                     <th scope="col">Check in</th>
                                                     <th scope="col">Check out</th>
                                                     <th scope="col">Amount</th>
@@ -72,17 +74,19 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <th scope="row">{{hotelDetails.hotelname}}</th>
-                                                    <td>{{room.roomname}}</td>
-                                                    <td>{{hotelDetails.hoteladdress}}</td>
-                                                    <td>{{booked.checkin}}</td>
-                                                     <td>{{booked.checkout}}</td>
-                                                    <td>{{total}}/-</td>
+                                                    <th scope="row">{{this.hotelname}}</th>
+                                                    <td>{{this.roomname}}</td>
+                                                    <td>{{this.hoteladdress}}</td>
+                                                    <td>{{this.people}}</td>
+                                                    <td>{{this.checkin}}</td>
+                                                     <td>{{this.checkout}}</td>
+                                                    <td>{{this.total}}/-</td>
                                                     <td><a class="btn btn-sm btn-primary" href="#" id="cancel">Cancel</a></td>
                                                 </tr>
                                                 <marquee scrollamount="20" behavior="alternate" direction="left"style="color:#9c27b0;"; >You can cancel only within 4hours of booking </marquee>
                                             </tbody>
                                         </table>
+                                        {{/each}}
                                         {{else}}
                                        <center>
                                            <h3 class="  mt-5 m" >No bookings ! &#129301;</h3><br>

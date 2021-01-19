@@ -146,20 +146,17 @@ router.post('/editprofile/:id',verifyLogin,function(req,res){
 
 //user profile
 router.get('/profile/:id',verifyLogin,(req,res,next)=>{
-    userHelper.getBooking(req.params.id).then((response)=>{
-        let people=parseInt(response.bookingdetails.people)
-        let roomprice=parseInt(response.roomdetails.roomprice)
-        let total = people*roomprice
+    userHelper.bookedRooms(req.params.id).then((response)=>{
         var today=new Date()
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd +'/'+ mm +'/'+ yyyy;
-        req.session.total=total
-        res.render('user/profile',{user:true,userdetails:req.session.user,booked:response.bookingdetails,
-            hotelDetails:response.hoteldetails,today,
-            room:response.roomdetails,total})
+        
+       
+        res.render('user/profile',{user:true,userdetails:req.session.user,today,bookings:response})
     }).catch((err)=>{
+        console.log(err);
         res.render('user/profile',{user:true,userdetails:req.session.user})
     })
     
