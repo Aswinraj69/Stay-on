@@ -9,5 +9,6 @@ module.exports={
     BOOKING_COLLECTION:'book',
     HOTELFOOD_COLLECTION:'hotelfood',
     PAYMENT_COLLECTION:'payment',
-    ORDER_COLLECTION:'order'
+    ORDER_COLLECTION:'order',
+    REFUND_COLLECTION:'refund'
 }

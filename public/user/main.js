@@ -15,7 +15,7 @@ function razorpayPayment(order){
         "currency": "INR",
         "name": "Travelix",
         "description": "Booking",
-        "image": "https://example.com/your_logo",
+        "image": "https://99designs-blog.imgix.net/blog/wp-content/uploads/2019/04/attachment_86982101-e1555563023971.png?auto=format&q=60&fit=max&w=930",
         "order_id": order.response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "handler": function (response){
             // alert(response.razorpay_payment_id);

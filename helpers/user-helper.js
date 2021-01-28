@@ -52,7 +52,7 @@ module.exports={
     },
     getrooms:(id)=>{
         return new Promise((resolve,reject)=>{
-         db.get().collection(collections.ROOM_COLLECTION).find({hid:id}).toArray().then((result)=>{
+         db.get().collection(collections.ROOM_COLLECTION).find({hid:id,status:"0"}).toArray().then((result)=>{
              resolve(result)
          })
         })
@@ -173,7 +173,11 @@ module.exports={
             if(hmac===paymentDetails['payment[razorpay_signature]']){
                 let orders={}
                 let userId=paymentDetails['order[receipt]']
-                console.log(paymentDetails);
+                var today=new Date()
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = dd +'/'+ mm +'/'+ yyyy;
                 db.get().collection(collections.BOOKING_COLLECTION).findOne({uid:userId}).then(async(bookdetails)=>{
                     let user=await db.get().collection(collections.USER_COLLECTION).findOne({_id:objectId(bookdetails.uid)})
                     let paisa=await parseInt(paymentDetails['order[amount]'])
@@ -187,11 +191,14 @@ module.exports={
                     orders.people=bookdetails.people
                     orders.total=total
                     orders.status="1"
+                    orders.date=today
                     let room=await db.get().collection(collections.ROOM_COLLECTION).findOne({_id:objectId(bookdetails.rid)})
                     orders.roomname=room.roomname
+                    orders.rid=room._id
                     let hotel=await db.get().collection(collections.HOTELS_COLLECTION).findOne({_id:objectId(bookdetails.hid)})
                     orders.hotelname=hotel.hotelname
                     orders.hoteladdress=hotel.hoteladdress
+                    orders.hid=hotel._id    
                     db.get().collection(collections.ORDER_COLLECTION).insertOne(orders).then(()=>{
                         db.get().collection(collections.BOOKING_COLLECTION).removeOne({uid:userId}).then(()=>{
                             resolve()
@@ -203,12 +210,15 @@ module.exports={
             }
         })
     },
-    changePaidStatus:(userId)=>{
+    ChangeRoomStatus:(userId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.BOOKING_COLLECTION).updateOne({uid:userId},{$set:{
-                status:"1"
-            }}).then(()=>{
-                resolve()
+            db.get().collection(collections.ORDER_COLLECTION).findOne({uid:userId}).then((order)=>{
+                db.get().collection(collections.ROOM_COLLECTION).updateOne({_id:objectId(order.rid)},{$set:{
+                    status:"1"
+                }}).then(()=>{
+                    resolve()
+                })
+               
             })
         })
     },
@@ -232,10 +242,38 @@ module.exports={
     //cancel booking
     cancelBooking:(bookId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.BOOKING_COLLECTION).removeOne({_id:objectId(bookId)}).then(()=>{
+            
+            db.get().collection(collections.ORDER_COLLECTION).findOne({_id:objectId(bookId)}).then((result)=>{
+                db.get().collection(collections.ROOM_COLLECTION).updateOne({_id:objectId(result.rid)},{$set:{
+                    status:"0"
+                }}).then(()=>{
+                    db.get().collection(collections.ORDER_COLLECTION).removeOne({_id:objectId(bookId)}).then(()=>{
+                        resolve()
+                    })
+                })
+               
+            }) 
+            
+        })
+    },
+
+    //refund
+    refund:(bookId,refundDetails)=>{
+        return new Promise(async(resolve,reject)=>{
+            let hotel=await db.get().collection(collections.ORDER_COLLECTION).findOne({_id:objectId(bookId)})
+            refundDetails.hid=hotel.hid
+            db.get().collection(collections.REFUND_COLLECTION).insertOne(refundDetails).then(()=>{
                 resolve()
             })
-            
+        })
+    },
+
+    //total for refund
+    getTotal:(bookId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ORDER_COLLECTION).findOne({_id:objectId(bookId)}).then((total)=>{
+                resolve(total.total)
+            })
         })
     }
 

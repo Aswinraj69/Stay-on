@@ -1,0 +1,63 @@
+<div class="dashboard-wrapper ">
+    <div class="influence-profile">
+        <div class="container-fluid dashboard-content ">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h3 class="mb-2">Influencer Profile </h3>
+                        <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit
+                            amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Refund</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="section-block" id="basicform">
+                        <h3 class="section-title">Refund</h3>
+                       
+                    </div>
+                    <div class="card">
+                        
+                        <div class="card-body">
+                            <form action="" method="POST" >
+                                <div class="container ">
+                                    <div class="col-md-6 ml-auto mr-auto form-group">
+                                        <label for="" class="text-dark">ACCOUNT NUMBER</label><br>
+                                        <input type="text" class="form-control" name="accno" value="{{details.accno}}">
+                                    </div>
+                                    <div class="col-md-6 ml-auto mr-auto form-group">
+                                        <label for="" class="text-dark">IFSC CODE</label><br>
+                                        <input type="text" class="form-control" name="ifsc" value="{{details.ifsc}}">
+                                    </div>
+                                    <div class="col-md-6 ml-auto mr-auto form-group">
+                                        <label for="" class="text-dark">ACCOUNT HOLDER</label><br>
+                                        <input type="text" class="form-control" name="holdername" value="{{details.holdername}}">
+                                    </div>
+                                    <div class="col-md-6 ml-auto mr-auto form-group">
+                                        <label for="" class="text-dark">BRANCH</label><br>
+                                        <input type="text" class="form-control" name="branch" value="{{details.branch}}">
+                                    </div>
+                                    <div class="col-md-6 ml-auto mr-auto form-group">
+                                        <div class="btn btn-info col-md-12">Total {{details.total}}/-</div>
+                                    </div>
+                                    <div class="col-md-6 ml-auto mr-auto form-group">
+                                        <button class="btn btn-primary col-md-12">Pay</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

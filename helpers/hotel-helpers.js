@@ -210,5 +210,33 @@ module.exports={
             })
         })
     },
+ 
+    
+    //get bookings
+    getbookings:(hId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ORDER_COLLECTION).find({hid:objectId(hId)}).toArray().then((bookings)=>{
+                resolve(bookings)
+            })
+        })
+    },
+
+    //refund
+    refund:(hotelId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.REFUND_COLLECTION).find({hid:objectId(hotelId)}).toArray().then((refunds)=>{
+                resolve(refunds)
+            })
+        })
+    },
+
+    //refund details
+    getRefundDetails:(refundId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.REFUND_COLLECTION).findOne({_id:objectId(refundId)}).then((details)=>{
+                resolve(details)
+            })
+        })
+    }
 
 } 
