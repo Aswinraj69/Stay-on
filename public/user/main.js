@@ -2,7 +2,7 @@ function payment(userId){
     
     $.ajax({
         url:'/razorpay/'+userId,
-        method:'get',
+        method:'get', 
         success:(response)=>{
            razorpayPayment(response) 
         }
@@ -292,3 +292,8 @@ var BrowserDetect = {
   ]
 
 };
+
+//handling food to cart
+function addFood(foodId){
+  
+}

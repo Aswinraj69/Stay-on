@@ -19,13 +19,13 @@
             <div class="card">
                 <h5 class="card-header"></h5>
                 <div class="card-body">
-                    <form action="/hotel/addhotelfood/" method="post" enctype="multipart/form-data">
+                    <form action="/hotel/addhotelfood" method="post" enctype="multipart/form-data">
                         <div class="form-group row">
                             <label class="col-3 col-lg-2 col-form-label text-right">Food</label>
                             <div class="col-9 col-lg-10">
                                 <input name="foodname" type="text" required="" placeholder="food name"
                                     class="form-control">
-                                <input type="hidden" name="hid" value="{{hotel._id}}">
+                                    <input name="hid" type="hidden" value="{{hotel._id}}" >
                             </div>
                         </div>
                          <div class="form-group row">

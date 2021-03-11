@@ -10,5 +10,6 @@ module.exports={
     HOTELFOOD_COLLECTION:'hotelfood',
     PAYMENT_COLLECTION:'payment',
     ORDER_COLLECTION:'order',
-    REFUND_COLLECTION:'refund'
+    REFUND_COLLECTION:'refund',
+    CART_COLLECTION:'cart'
 }

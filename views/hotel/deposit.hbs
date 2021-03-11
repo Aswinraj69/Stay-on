@@ -28,8 +28,8 @@
                     <div class="card">
                         
                         <div class="card-body">
-                            <form action="" method="POST" >
-                                <div class="container ">
+                          <form action="">
+                               <div class="container ">
                                     <div class="col-md-6 ml-auto mr-auto form-group">
                                         <label for="" class="text-dark">ACCOUNT NUMBER</label><br>
                                         <input type="text" class="form-control" name="accno" value="{{details.accno}}">
@@ -50,10 +50,12 @@
                                         <div class="btn btn-info col-md-12">Total {{details.total}}/-</div>
                                     </div>
                                     <div class="col-md-6 ml-auto mr-auto form-group">
-                                        <button class="btn btn-primary col-md-12">Pay</button>
+                                        <a href="#" onclick="payment('{{details.hid}},{{details.total}},{{details.accno}},{{details.ifsc}},{{details.holdername}},{{details.branch}}')" class="btn btn-primary col-md-12">Pay</a>
                                     </div>
                                 </div>
-                            </form>
+                                </form>
+                               
+                           
                         </div>
                     </div>
                 </div>

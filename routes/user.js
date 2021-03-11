@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userHelper=require('../helpers/user-helper');
-const { use } = require('./hotel');
+
 const verifyLogin=(req,res,next)=>{
     if(req.session.userLoggedIn){
         next()
@@ -13,7 +13,10 @@ const verifyLogin=(req,res,next)=>{
 /* GET users listing. */
 router.get('/', function(req, res, next) {
     userHelper.getCity().then((response)=>{
-        res.render('user/index',{user:true,userdetails:req.session.user,cities:response.city,hotels:response.hotel});
+        res.render('user/index',{user:true,userdetails:req.session.user,cities:response.city,status:req.session.status,
+            hotels:response.hotel,rooms:req.session.searchroom,luxury:response.luxury});
+            req.session.status=null
+        req.session.searchroom=null
     })
     
 });
@@ -75,19 +78,26 @@ router.get('/book-food',function(req,res,next){
 router.get('/room-details/:id',function(req,res,next){
     req.session.rid=req.params.id
     userHelper.roomDetails(req.params.id).then((result)=>{
-        userHelper.getHotelFood(result.room.hid).then((hotelfood)=>{
+       
             res.render('user/room-details',{user:true,roomdetails:result.room,hoteldetails:result.hotel,
-                food:result.food,userdetails:req.session.user,hotelfood,foods:req.session.foods})
+                food:result.food,userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr})
+                req.session.bookingErr=null
                 
-        })
+       
         
         
     })
     
 })
 router.post('/booking-room', verifyLogin,function(req,res,next){
-   userHelper.booking(req.body).then(()=>{
-       res.redirect('/confirm-booking')
+   userHelper.booking(req.body).then((response)=>{
+       if(response.status){
+        res.redirect('/confirm-booking')
+       }else{
+           req.session.bookingErr=true
+           res.redirect('/room-details/'+req.body.rid)
+       }
+      
    })
 })
 router.get('/confirm-booking', verifyLogin, function(req,res,next){
@@ -128,7 +138,7 @@ router.post('/verify-payment',verifyLogin,(req,res,next)=>{
     userHelper.verifyPayment(req.body).then(()=>{
         
         userHelper.ChangeRoomStatus(req.body['order[receipt]']).then(()=>{
-            
+            req.session.bookingStatus=true
             res.json({status:true})
         })
     }).catch((err)=>{
@@ -162,8 +172,6 @@ router.get('/profile/:id',verifyLogin,(req,res,next)=>{
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd +'/'+ mm +'/'+ yyyy;
-        
-       
         res.render('user/profile',{user:true,userdetails:req.session.user,today,bookings:response})
     }).catch((err)=>{
         console.log(err);
@@ -187,10 +195,62 @@ router.get('/edit-user-profile/:id',verifyLogin,(req,res,next)=>{
 router.post('/cancel-booking/:id',verifyLogin,(req,res)=>{
     userHelper.refund(req.params.id,req.body).then(()=>{ 
         userHelper.cancelBooking(req.params.id).then(()=>{
+            req.session.cancelStatus=true
         res.redirect('/profile/'+req.session.user._id)
         })
     })
 })
 
+//search rooms
+router.post('/search-room',(req,res)=>{
+    userHelper.searchRoom(req.body).then((rooms)=>{
+        if(rooms.status){
+            req.session.status=true
+            res.redirect('/')
+        }else{
+            req.session.searchroom=rooms
+            res.redirect('/')
+        }
+        
+    })
+})
+
+//city rooms
+router.get('/city-rooms/:id',(req,res)=>{
+    userHelper.cityRooms(req.params.id).then((rooms)=>{
+        if(rooms.status){
+            req.session.status=true
+            res.redirect('/')
+        }else{
+            req.session.searchroom=rooms
+            res.redirect('/')
+        }
+       
+    })
+})
+
+//contact page
+router.get('/contact',(req,res)=>{
+    res.render('user/contact',{user:true,userdetails:req.session.user})
+})
+
+//foods
+router.get('/food',verifyLogin,(req,res)=>{
+    userHelper.getFood(req.session.user._id).then((foods)=>{
+        userHelper.getCartItem(req.session.user._id).then((items)=>{
+            console.log(items);
+            res.render('user/food',{user:true,userdetails:req.session.user,foods,items})
+        })
+       
+    })
+    
+})
+
+//add food to cart
+router.get('/add-food/:id',verifyLogin,(req,res)=>{
+    userHelper.addFood(req.params.id,req.session.user._id).then(()=>{
+        res.redirect('/food')
+    })
+})
 
 module.exports = router;

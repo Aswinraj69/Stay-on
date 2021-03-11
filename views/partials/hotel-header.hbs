@@ -1,17 +1,13 @@
 <div class="dashboard-header">
     <nav class="navbar navbar-expand-lg bg-white fixed-top">
-        <a class="navbar-brand" href="/admin/home">{{hotel.hotelname}}</a>
+        <a class="navbar-brand" href="/hotel/home">{{hotel.hotelname}}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto navbar-right-top">
-                <li class="nav-item">
-                    <div id="custom-search" class="top-search-bar">
-                        <input class="form-control" type="text" placeholder="Search..">
-                    </div>
-                </li>
+                
                 <li class="nav-item dropdown notification">
                     <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
@@ -80,7 +76,7 @@
 
                 <li class="nav-item dropdown nav-user">
                     <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><img src="/assets/images/admin.jpg" alt=""
+                        aria-haspopup="true" aria-expanded="false"><img src="/hotel/hotel-images/{{hotel._id}}.jpg" alt=""
                             class="user-avatar-md rounded-circle"></a>
                     <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                         aria-labelledby="navbarDropdownMenuLink2">
@@ -132,12 +128,20 @@
                                 </li>
                                 <li class="nav-item">
 
-                                    <a class="nav-link" href="/hotel/booking/{{hotel._id}}">Bookings</a>
+                                    <a class="nav-link" href="/hotel/booking/{{hotel._id}}">Bookings 
+                                    {{#if bookingStatus}}
+                                    <sup><i class="badge-dot badge-danger"></i></sup>
+                                    {{/if}}
+                                    </a>
 
                                 </li>
                                 <li class="nav-item">
 
-                                    <a class="nav-link" href="/hotel/refund/{{hotel._id}}">Refund Management</a>
+                                    <a class="nav-link" href="/hotel/refund/{{hotel._id}}">Refund Management
+                                    {{#if cancelStatus}}
+                                    <sup><i class="badge-dot badge-danger"></i></sup>
+                                    {{/if}}
+                                    </a>
 
                                 </li>
                                  <li class="nav-item">

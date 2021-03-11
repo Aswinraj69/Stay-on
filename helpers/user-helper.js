@@ -3,6 +3,7 @@ const db=require('../config/connection')
 const bcrypt=require('bcrypt')
 const objectId=require('mongodb').ObjectID
 const Razorpay=require('razorpay')
+const { resolve } = require('path')
 var instance= new Razorpay({
     key_id:'rzp_test_BTPYMRVQAXV143',
     key_secret:'T3nUEiAc1nQ8TC5PYYMTZiyw',
@@ -45,7 +46,9 @@ module.exports={
            let city = await db.get().collection(collections.CITY_COLLECTION).find().toArray()
            response.city=city
            let hotel = await db.get().collection(collections.HOTELS_COLLECTION).find().toArray()
-           response.hotel=hotel    
+           response.hotel=hotel 
+           let luxury = await db.get().collection(collections.ROOM_COLLECTION).find({category:"luxury"}).toArray() 
+           response.luxury=luxury  
           resolve(response)   
            
         })
@@ -73,10 +76,35 @@ module.exports={
         })
     },
     booking:(bookdetails)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collections.BOOKING_COLLECTION).insertOne(bookdetails).then(()=>{
-                resolve()
-            })
+        return new Promise(async(resolve,reject)=>{
+            let booking= await db.get().collection(collections.ORDER_COLLECTION).findOne({rid:objectId(bookdetails.rid)})
+            if (booking){
+                
+                //to find days between user enter checkin date and checkout date in ordered bookings
+                let checkin=new Date(bookdetails.checkin)
+                let day=86400000
+                let checkout=new Date(booking.checkout)
+                let milliseconds=checkout.getTime()-checkin.getTime()
+                let days=milliseconds/day
+                //end
+
+                let checkinDate = booking.checkin
+                if(checkinDate===bookdetails.checkin){
+                    resolve({status:false})
+                }else if(days>0){
+                    resolve({status:false})
+                }
+                else{
+                    db.get().collection(collections.BOOKING_COLLECTION).insertOne(bookdetails).then(()=>{
+                        resolve({status:true})
+                    }) 
+                }
+            }else{
+                db.get().collection(collections.BOOKING_COLLECTION).insertOne(bookdetails).then(()=>{
+                    resolve({status:true})
+                })
+            }
+            
         })
     },
     getBooking:(uId)=>{
@@ -132,10 +160,14 @@ module.exports={
             resolve(foodItems)
         })
     },
-    getHotelFood:(hid)=>{
+    getFood:(userId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.HOTELFOOD_COLLECTION).find({hid:hid}).limit(4).toArray().then((result)=>{
-                resolve(result)
+            db.get().collection(collections.ORDER_COLLECTION).findOne({uid:userId}).then((result)=>{
+                
+                db.get().collection(collections.HOTELFOOD_COLLECTION).find({hid:objectId(result.hid)}).toArray().then((food)=>{
+                    
+                    resolve(food)
+                })
             })
            
         })
@@ -194,6 +226,7 @@ module.exports={
                     orders.date=today
                     let room=await db.get().collection(collections.ROOM_COLLECTION).findOne({_id:objectId(bookdetails.rid)})
                     orders.roomname=room.roomname
+                    orders.roomno=room.roomno
                     orders.rid=room._id
                     let hotel=await db.get().collection(collections.HOTELS_COLLECTION).findOne({_id:objectId(bookdetails.hid)})
                     orders.hotelname=hotel.hotelname
@@ -274,6 +307,99 @@ module.exports={
             db.get().collection(collections.ORDER_COLLECTION).findOne({_id:objectId(bookId)}).then((total)=>{
                 resolve(total.total)
             })
+        })
+    },
+
+    //search room
+    searchRoom:(details)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ROOM_COLLECTION).find({city:{$regex:details.city,$options:"i"}}).toArray().then((rooms)=>{
+                if(rooms[0]){
+                    resolve(rooms)
+                }else{
+                    resolve({status:true})
+                }
+                
+            })
+        })
+    },
+
+    //city rooms
+    cityRooms:(cityId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.CITY_COLLECTION).findOne({_id:objectId(cityId)}).then((result)=>{
+                db.get().collection(collections.ROOM_COLLECTION).find({city:result.city}).toArray().then((rooms)=>{
+                    if(rooms[0]){
+                        resolve(rooms)
+                    }else{
+                        resolve({status:true})
+                    }
+                    
+                })
+                
+            })
+        })
+    },
+    addFood:(foodId,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let foodObj={
+                item:objectId(foodId),
+                quantity:1
+            }
+            let userCart = await db.get().collection(collections.CART_COLLECTION).findOne({userId:objectId(userId)})
+            if(userCart){
+                let foodExist = userCart.foods.findIndex(food=>food.item==foodId)
+                if(foodExist!=-1){
+                    db.get().collection(collections.CART_COLLECTION).updateOne({'foods.item':objectId(foodId)},
+                    {
+                        $inc :{'foods.$.quantity':1}
+                    }
+                    ).then(()=>{
+                        resolve()
+                    })
+                }else{
+                db.get().collection(collections.CART_COLLECTION).updateOne({userId:objectId(userId)},{$push:{
+                    foods:foodObj
+                }}).then(()=>{
+                    resolve()
+                })
+                }
+            }else{
+                let cartObj={
+                    userId:objectId(userId),
+                    foods:[foodObj]
+                }
+                db.get().collection(collections.CART_COLLECTION).insertOne(cartObj).then((response)=>{
+                    resolve()
+                })
+            }
+        })
+    },
+    getCartItem:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+           let cartItems = await db.get().collection(collections.CART_COLLECTION).aggregate([
+               {
+                   $match:{userId:objectId(userId)}
+               },
+               {
+                   $unwind:'$foods'
+               },
+               {
+                   $project:{
+                       item:'$foods.item',
+                       quantity:'$foods.quantity'
+                   }
+               },
+               {
+                   $lookup:{
+                       from:collections.HOTELFOOD_COLLECTION,
+                       localField:'item',
+                       foreignField:'_id',
+                       as:"foods"
+                   }
+               }
+           ]).toArray()
+           resolve(cartItems)
         })
     }
 

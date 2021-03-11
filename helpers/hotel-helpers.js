@@ -90,6 +90,7 @@ module.exports={
                 roomprice:room.roomprice,
                roomfeatures:room.roomfeatures,
                 category:room.category,
+                roomno:room.roomno
             }}).then((response)=>{
                 resolve(response)
             })
@@ -132,7 +133,7 @@ module.exports={
     },
     getAllFood:(hid)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.FOOD_COLLECTION).find({hid:hid}).toArray().then((result)=>{
+            db.get().collection(collections.FOOD_COLLECTION).find({hid:objectId(hid)}).toArray().then((result)=>{
                 resolve(result)
             })
         })
@@ -171,16 +172,23 @@ module.exports={
             })
         })
     },
-    addHotelFood:(foodDetails)=>{
+    addHotelFood:(foodDetails)=>{ 
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.HOTELFOOD_COLLECTION).insertOne(foodDetails).then((result)=>{
+            let food={
+                foodname:foodDetails.foodname,
+                restaurant:foodDetails.restaurant,
+                price:foodDetails.price,
+                category:foodDetails.category,
+                hid:objectId(foodDetails.hid)
+            }
+            db.get().collection(collections.HOTELFOOD_COLLECTION).insertOne(food).then((result)=>{
                 resolve(result.ops[0]._id)
             })
         })
     },
     getHotelFood:(hid)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.HOTELFOOD_COLLECTION).find({hid:hid}).toArray().then((result)=>{
+            db.get().collection(collections.HOTELFOOD_COLLECTION).find({hid:objectId(hid)}).toArray().then((result)=>{
                 resolve(result)
             })
         })

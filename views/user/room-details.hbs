@@ -57,10 +57,16 @@
                                     <span class="sr-only">Next</span>
                                 </a>
                             </div>
+
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="product-details">
+                             {{#if bookingErr}}
+                                <div class="alert alert-danger" role="alert" id="fail">
+                                    Room is not available on this dates !
+                                </div>
+                                {{/if}}
                             <div class="border-bottom pb-3 mb-3">
                                 <h2 class="mb-3">{{roomdetails.roomname}} <a href=""><span
                                             style="font-size:15px;float: right ;" class=""><i
@@ -88,13 +94,15 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <h5>Check <i class="icofont-long-arrow-down"></i></h5>
-                                        <input type="date" name="checkin" style="margin-left:1px" required="" class="form-control">
+                                        <input type="date" name="checkin" style="margin-left:1px" required=""
+                                            placeholder="Check In" class="form-control datepicker ">
                                     </div>
 
 
-                                    <div class="col-md-6 " >
+                                    <div class="col-md-6 ">
                                         <h5 style="">Check<i class="icofont-long-arrow-up"></i></h5>
-                                        <input type="date" name="checkout"  required="" class="form-control">
+                                        <input type="date" name="checkout" required="" placeholder="Check Out"
+                                            class="form-control datepicker ">
 
                                     </div>
 
@@ -105,9 +113,11 @@
                                 <h4 class="mb-1">Descriptions</h4>
                                 <br>
                                 <p>{{hoteldetails.about}}</p>
-                                <p>For more details: <a href="tel:{{hoteldetails.mobile}}" class="btn btn-primary btn-sm rounded-circle"> <i class="icofont-phone"></i></a></p>
+                                <p>For more details: <a href="tel:{{hoteldetails.mobile}}"class="btn btn-primary btn-sm rounded-circle"> <i class="icofont-phone"></i></a>
+                                </p>
                                 <button class="btn btn-primary btn-block btn-lg">Book</button>
-
+                                <br>
+                               
                             </div>
                         </div>
                     </div>
@@ -115,13 +125,23 @@
                     <div class="col-md-12">
                         <h4 class=" text-center mt-4">Room</h4>
                         <div class=" p-3 gallery">
-                            <a href="/hotel/rooms-images/{{roomdetails._id}}1.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}1.jpg" alt="First slide"></a>
-                            <a href="/hotel/rooms-images/{{roomdetails._id}}2.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}2.jpg" alt="First slide"></a>
-                           <a href="/hotel/rooms-images/{{roomdetails._id}}3.jpg" data-lightbox="mygallery" ><img class="" src="/hotel/rooms-images/{{roomdetails._id}}3.jpg" alt="First slide"></a>
-                            <a href="/hotel/rooms-images/{{roomdetails._id}}4.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}4.jpg" alt="First slide"></a>
-                            <a href="/hotel/rooms-images/{{roomdetails._id}}5.jpg" data-lightbox="mygallery"><img class="" src="/hotel/rooms-images/{{roomdetails._id}}5.jpg" alt="First slide"></a>
-                           
-                                      
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}1.jpg" data-lightbox="mygallery">
+                                <img class="" src="/hotel/rooms-images/{{roomdetails._id}}1.jpg" alt="First slide">
+                            </a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}2.jpg" data-lightbox="mygallery">
+                                <img class="" src="/hotel/rooms-images/{{roomdetails._id}}2.jpg" alt="First slide">
+                            </a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}3.jpg" data-lightbox="mygallery">
+                                <img class="" src="/hotel/rooms-images/{{roomdetails._id}}3.jpg" alt="First slide">
+                            </a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}4.jpg" data-lightbox="mygallery">
+                                <img class="" src="/hotel/rooms-images/{{roomdetails._id}}4.jpg" alt="First slide">
+                            </a>
+                            <a href="/hotel/rooms-images/{{roomdetails._id}}5.jpg" data-lightbox="mygallery">
+                                <img class="" src="/hotel/rooms-images/{{roomdetails._id}}5.jpg" alt="First slide">
+                            </a>
+
+
                             {{!-- <div id="carouselExampleControls" class="carousel slide " data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
@@ -163,3 +183,13 @@
 
         </div>
 </section>
+<script>
+    lightbox.option({
+        'resizeDuration': 100,
+        'wrapAround': true,
+    })
+  setTimeout(function(){
+      $('#fail').css('display','none')
+  }, 5000);
+
+</script>

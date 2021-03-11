@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var hotelHelper = require('../helpers/hotel-helpers');
-const userHelper = require('../helpers/user-helper');
+
 
 const verifyLogin = (req, res, next) => {
   if (req.session.hotelLoggedIn) {
@@ -37,7 +37,10 @@ router.post('/', function (req, res, next) {
 //home page
 router.get('/home', function (req, res, next) {
   if (req.session.hotelLoggedIn) {
-    res.render('hotel/index', { hotel: true, hotel: req.session.hotel });
+    res.render('hotel/index', { hotel: true, hotel: req.session.hotel,
+      bookingStatus:req.session.bookingStatus,
+      cancelStatus:req.session.cancelStatus});
+    req.session.bookingStatus=null
   } else {
     res.redirect('/hotel')
   }
@@ -55,7 +58,8 @@ router.get('/profile/:id', function (req, res, next) {
   if (req.session.hotelLoggedIn) {
     hotelHelper.getHotel(req.params.id).then((profile) => {
       console.log(profile);
-      res.render('hotel/hotelprofile', { hotel: true, hotel: req.session.hotel, profile });
+      res.render('hotel/hotelprofile', { hotel: true, hotel: req.session.hotel, profile ,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus  });
+      req.session.bookingStatus=null
     })
 
   } else {
@@ -66,7 +70,7 @@ router.get('/profile/:id', function (req, res, next) {
 router.get('/editprofile/:id', function (req, res) {
   if (req.session.hotelLoggedIn) {
     hotelHelper.editProfile(req.params.id).then((hotelDetails) => {
-      res.render('hotel/editprofile', { hotel: true, hotelDetails, hotel: req.session.hotel });
+      res.render('hotel/editprofile', { hotel: true, hotelDetails, hotel: req.session.hotel,cancelStatus:req.session.cancelStatus  });
     })
 
   } else {
@@ -85,7 +89,8 @@ router.post('/editprofile/:id', function (req, res) {
 router.get('/rooms', function (req, res) {
   if (req.session.hotelLoggedIn) {
     hotelHelper.getRooms(req.session.hotel._id).then((rooms) => {
-      res.render('hotel/rooms', { hotel: true, rooms, hotel: req.session.hotel })
+      res.render('hotel/rooms', { hotel: true, rooms, hotel: req.session.hotel ,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus  })
+      req.session.bookingStatus=null
     })
   } else {
     res.redirect('/hotel')
@@ -105,7 +110,10 @@ router.get('/food', function (req, res) {
     hotelHelper.getFoodCategory(req.session.hotel._id).then((category) => {
       hotelHelper.getAllFood(req.session.hotel._id).then((food) => {
         hotelHelper.getHotelFood(req.session.hotel._id).then((hotelfoods) => {
-          res.render('hotel/food', { hotel: true, hotel: req.session.hotel, categories: category, food: food, hotelfoods })
+          res.render('hotel/food', { hotel: true, hotel: req.session.hotel, categories: category, food: food, hotelfoods
+             ,bookingStatus:req.session.bookingStatus
+            ,cancelStatus:req.session.cancelStatus  })
+          req.session.bookingStatus=null
         })
 
       })
@@ -282,7 +290,8 @@ router.post('/edithotelfood/:id', function (req, res) {
 
 router.get('/booking/:id', verifyLogin, (req, res) => {
   hotelHelper.getbookings(req.params.id).then((bookings) => {
-    res.render('hotel/booking', { hotel: true, bookings: bookings, hotel: req.session.hotel })
+    res.render('hotel/booking', { hotel: true, bookings: bookings, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus  })
+    req.session.bookingStatus=null
   })
 
 })
@@ -290,7 +299,8 @@ router.get('/booking/:id', verifyLogin, (req, res) => {
 //refund
 router.get('/refund/:id',verifyLogin,(req,res)=>{
   hotelHelper.refund(req.params.id).then((refunds)=>{
-    res.render('hotel/refund',{hotel:true, hotel: req.session.hotel,refunds})
+    res.render('hotel/refund',{hotel:true, hotel: req.session.hotel,refunds,bookingStatus:req.session.bookingStatus ,cancelStatus:req.session.cancelStatus })
+    req.session.bookingStatus=null
   })
   
 })
@@ -298,9 +308,24 @@ router.get('/refund/:id',verifyLogin,(req,res)=>{
 //cash deposit to reuested customer
 router.get('/deposit/:id',verifyLogin,(req,res)=>{
   hotelHelper.getRefundDetails(req.params.id).then((details)=>{
-    res.render('hotel/deposit',{hotel:true, hotel:req.session.hotel,details})
+    if(details){
+      req.session.cancelStatus=true
+    }else{
+      req.session.cancelStatus=null
+    }
+    res.render('hotel/deposit',{hotel:true, hotel:req.session.hotel,details,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus })
+    req.session.bookingStatus=null
   })
   
+})
+//razorpay order
+router.post('/razorpay/:id',verifyLogin,(req,res,next)=>{
+  
+  // hotelHelper.createPaymentOrder(req.params.id,req.body).then((response)=>{
+  //     let hotel=req.session.hotel
+  //     res.json({response:response,hotel:hotel}) 
+  // })
+  console.log(req.body);
 })
 
 module.exports = router;
