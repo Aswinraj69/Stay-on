@@ -238,10 +238,8 @@ router.get('/contact',(req,res)=>{
 router.get('/food',verifyLogin,(req,res)=>{
     userHelper.getFood(req.session.user._id).then((foods)=>{
         userHelper.getCartItem(req.session.user._id).then((items)=>{
-            console.log(items);
             res.render('user/food',{user:true,userdetails:req.session.user,foods,items})
         })
-       
     })
     
 })

@@ -395,7 +395,7 @@ module.exports={
                        from:collections.HOTELFOOD_COLLECTION,
                        localField:'item',
                        foreignField:'_id',
-                       as:"foods"
+                       as:"food"
                    }
                }
            ]).toArray()

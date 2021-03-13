@@ -70,27 +70,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{#each items}}
+                        
                         <tr>
-                            <th scope="row">Plaza</th>
-                            <td>Idli</td>
-                            <td>1</td>
-                            <td>600/-</td>
+                            {{#each this.food}}
+                            <th scope="row">{{this.restaurant}}</th>
+                            
+                            <td>{{this.foodname}}</td>
+                            {{/each}}
+                            <td><small><a href="#"><i class="fa fa-minus mr-2"></i></a></small> {{this.quantity}}  <small><a href="#"><i class="fa fa-plus ml-2"></i></a></small></td>
+                            {{#each this.food}}
+                            <td>{{this.price}}/-</td>
+                            {{/each}}
                             <td><a href="#"><i class="icofont icofont-trash "></i></a></td>
                         </tr>
-                        <tr>
-                            <th scope="row">Plaza</th>
-                            <td>Idli</td>
-                            <td>1</td>
-                            <td>600/-</td>
-                            <td><a href="#"><i class="icofont icofont-trash "></i></a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Plaza</th>
-                            <td>Idli</td>
-                            <td>1</td>
-                            <td>600/-</td>
-                            <td><a href="#"><i class="icofont icofont-trash "></i></a></td>
-                        </tr>
+                       {{/each}}
                         <tr>
                             <td></td>
                             <td></td>
