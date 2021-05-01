@@ -1,0 +1,45 @@
+<section class="bg-light">
+    <div class="container ">
+        <div class=" col-md-12">
+            <div class="container mt-5">
+                <div class="section-title">
+                    <h2>Place order</h2>
+                </div>
+            </div>
+
+            <div class="col-md-12 mt-5">
+                <form action="/order" method="POST">
+                {{#each cartItems}}
+                    <div class="row mt-5">
+                        
+                        <div class="col">
+                            <input type="text" readonly class="form-control" placeholder="Dosa" name="food" value="{{this.foods.foodname}}">
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control datepicker" placeholder="--select date--" name="datetodeliver">
+                        </div>
+                         <div class="col">
+                            <input type="time" class="form-control" placeholder="Time" name="time">
+                             
+                        </div>
+                         <div class="col">
+                            <input type="number" class="form-control" placeholder="room no" name="roomno">
+                             
+                        </div>
+                    </div>
+                    {{/each}} 
+                    <input type="hidden" name="hid" value="{{hotelDetail.hid}}">
+                    <input type="hidden" name="customername" value="{{userdetails.name}}">
+                     <input type="hidden" class="form-control" name="user" value="{{userdetails._id}}">
+                    <div class="mt-5 float-right">
+                        <small class="font-light text-secondary mt-5">Have to fill the above details if you want to take away food at specific time.</small>
+                        <p class="h4 mt-5 mb-4">Total :{{total}}/-</p>
+                        <button  class="btn btn-success mb-5 col-md-12">Book</a>
+                    </div>
+                   
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>

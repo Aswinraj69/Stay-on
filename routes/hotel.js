@@ -290,7 +290,9 @@ router.post('/edithotelfood/:id', function (req, res) {
 
 router.get('/booking/:id', verifyLogin, (req, res) => {
   hotelHelper.getbookings(req.params.id).then((bookings) => {
-    res.render('hotel/booking', { hotel: true, bookings: bookings, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus  })
+    console.log(bookings.foods);
+    res.render('hotel/booking', { hotel: true, bookings: bookings.rooms, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus,
+                                        foods:bookings.foods  })
     req.session.bookingStatus=null
   })
 
@@ -328,4 +330,32 @@ router.post('/razorpay/:id',verifyLogin,(req,res,next)=>{
   console.log(req.body);
 })
 
+
+//food delivery
+router.get('/food-delivered/:id',verifyLogin,(req,res)=>{
+  hotelHelper.changeFoodStatus(req.params.id).then((result)=>{
+    res.redirect('/hotel/booking/'+req.session.hotel._id)
+  })
+})
+
+//hotel delivered foods
+router.get('/delivered-food/:id',verifyLogin,async(req,res)=>{
+  let delivered_foods = await hotelHelper.getDeliveredFoods(req.params.id)
+  res.render('hotel/delivered-food',{hotel: true, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus
+    ,cancelStatus:req.session.cancelStatus,foods:delivered_foods})
+})
+
+//checkout rooms
+router.get('/checkout/:id',verifyLogin,(req,res)=>{
+  hotelHelper.doCheckout(req.params.id).then(()=>{
+    res.redirect('/hotel/booking/'+req.session.hotel._id)
+  })
+})
+
+//checkout history
+router.get('/checkout-history/:id',verifyLogin,async(req,res)=>{
+  let bookings = await hotelHelper.getCheckoutList(req.params.id)
+  res.render('hotel/checkout-history',{hotel: true, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus
+    ,cancelStatus:req.session.cancelStatus,bookings})
+})
 module.exports = router;

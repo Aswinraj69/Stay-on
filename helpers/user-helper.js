@@ -47,7 +47,7 @@ module.exports={
            response.city=city
            let hotel = await db.get().collection(collections.HOTELS_COLLECTION).find().toArray()
            response.hotel=hotel 
-           let luxury = await db.get().collection(collections.ROOM_COLLECTION).find({category:"luxury"}).toArray() 
+           let luxury = await db.get().collection(collections.ROOM_COLLECTION).find({category:{$regex:"luxury",$options:"i"}}).toArray() 
            response.luxury=luxury  
           resolve(response)   
            
@@ -128,7 +128,7 @@ module.exports={
     },
     bookedRooms:(uId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.ORDER_COLLECTION).find({uid:uId}).toArray().then((result)=>{
+            db.get().collection(collections.ORDER_COLLECTION).find({uid:uId,status:"1"}).toArray().then((result)=>{
                 resolve(result)
             })
         })
@@ -162,22 +162,38 @@ module.exports={
     },
     getFood:(userId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.ORDER_COLLECTION).findOne({uid:userId}).then((result)=>{
+            db.get().collection(collections.ORDER_COLLECTION).findOne({uid:userId,status:"1"}).then((result)=>{
+                if(result){
+                    db.get().collection(collections.HOTELFOOD_COLLECTION).find({hid:objectId(result.hid)}).toArray().then((food)=>{
+                        resolve(food)
+                    })
+                }else{
+                    resolve({status:false})
+                }
                 
-                db.get().collection(collections.HOTELFOOD_COLLECTION).find({hid:objectId(result.hid)}).toArray().then((food)=>{
-                    
-                    resolve(food)
-                })
             })
            
         })
     },
     getSearchFood:(query)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.HOTELFOOD_COLLECTION).find({foodname:{$regex:query.food,$options:"i"}}).toArray().then((result)=>{
-                resolve(result)
+            db.get().collection(collections.ORDER_COLLECTION).findOne({uid:query.uid}).then((result)=>{
+                
+                if(result){
+                    db.get().collection(collections.HOTELFOOD_COLLECTION).find({foodname:{$regex:query.food,$options:"i"},hid:result.hid}).toArray().then((food)=>{
+                        if(food[0]){
+                            resolve(food)
+                        }else{
+                            resolve({status:false})
+                        }
+                        
+                    })
+                }else{
+                    resolve({status:false})
+                }
+                
             })
-         
+            
         })
     },
     createPaymentOrder:(userId,total)=>{
@@ -191,6 +207,23 @@ module.exports={
             instance.orders.create(options,function(err,order){
                 db.get().collection(collections.PAYMENT_COLLECTION).insertOne(order).then(()=>{
                     resolve(order)
+                   
+                })
+            })
+        })
+    },
+    createPaymentFoodOrder:(userId,total)=>{
+        return new Promise((resolve,reject)=>{
+            totalPaisa=total*100
+            var options ={
+                amount:totalPaisa,
+                currency:"INR",
+                receipt:""+userId
+            };
+            instance.orders.create(options,function(err,order){
+                db.get().collection(collections.PAYMENT_COLLECTION).insertOne(order).then(()=>{
+                    resolve(order)
+                   
                 })
             })
         })
@@ -201,8 +234,9 @@ module.exports={
             let hmac = crypto.createHmac('sha256','T3nUEiAc1nQ8TC5PYYMTZiyw')
             hmac.update(paymentDetails['payment[razorpay_order_id]']+'|'+paymentDetails['payment[razorpay_payment_id]'])
             hmac=hmac.digest("hex")
-
+            
             if(hmac===paymentDetails['payment[razorpay_signature]']){
+                
                 let orders={}
                 let userId=paymentDetails['order[receipt]']
                 var today=new Date()
@@ -279,10 +313,21 @@ module.exports={
             db.get().collection(collections.ORDER_COLLECTION).findOne({_id:objectId(bookId)}).then((result)=>{
                 db.get().collection(collections.ROOM_COLLECTION).updateOne({_id:objectId(result.rid)},{$set:{
                     status:"0"
-                }}).then(()=>{
-                    db.get().collection(collections.ORDER_COLLECTION).removeOne({_id:objectId(bookId)}).then(()=>{
-                        resolve()
-                    })
+                }}).then(async()=>{
+                    let food = await db.get().collection(collections.FOODORDER_COLLECTION).findOne({userId:objectId(result.uid)})
+                    if(food){
+                        db.get().collection(collections.FOODORDER_COLLECTION).removeOne({userId:objectId(result.uid)}).then(()=>{
+                            db.get().collection(collections.ORDER_COLLECTION).removeOne({_id:objectId(bookId)}).then(async()=>{
+                                resolve()
+                            })
+                        })
+                    }else{
+                        db.get().collection(collections.ORDER_COLLECTION).removeOne({_id:objectId(bookId)}).then(async()=>{
+                            resolve()
+                        })
+                    }
+                    
+
                 })
                
             }) 
@@ -342,6 +387,8 @@ module.exports={
     },
     addFood:(foodId,userId)=>{
         return new Promise(async(resolve,reject)=>{
+            let food = await db.get().collection(collections.HOTELFOOD_COLLECTION).findOne({_id:objectId(foodId)})
+            let hotelId = food.hid
             let foodObj={
                 item:objectId(foodId),
                 quantity:1
@@ -350,7 +397,7 @@ module.exports={
             if(userCart){
                 let foodExist = userCart.foods.findIndex(food=>food.item==foodId)
                 if(foodExist!=-1){
-                    db.get().collection(collections.CART_COLLECTION).updateOne({'foods.item':objectId(foodId)},
+                    db.get().collection(collections.CART_COLLECTION).updateOne({userId:objectId(userId),'foods.item':objectId(foodId)},
                     {
                         $inc :{'foods.$.quantity':1}
                     }
@@ -367,6 +414,7 @@ module.exports={
             }else{
                 let cartObj={
                     userId:objectId(userId),
+                    hotelId:objectId(hotelId),
                     foods:[foodObj]
                 }
                 db.get().collection(collections.CART_COLLECTION).insertOne(cartObj).then((response)=>{
@@ -387,7 +435,9 @@ module.exports={
                {
                    $project:{
                        item:'$foods.item',
-                       quantity:'$foods.quantity'
+                       quantity:'$foods.quantity',
+                       
+                       
                    }
                },
                {
@@ -397,11 +447,179 @@ module.exports={
                        foreignField:'_id',
                        as:"food"
                    }
+               },
+               {
+                   $project:{
+                       userId:1,quantity:1,foods:{$arrayElemAt:['$food',0]}
+                   }
                }
            ]).toArray()
            resolve(cartItems)
         })
+    },
+    changeFoodQuantity:(details)=>{
+        return new Promise((resolve,reject)=>{
+            let count = parseInt(details.count)
+            if(count==-1&&details.quantity==1){
+                db.get().collection(collections.CART_COLLECTION).updateOne({_id:objectId(details.cart)},{
+                    $pull:{foods:{item:objectId(details.food)}}
+                }).then(()=>{
+                   resolve({status:true})
+                })
+            }else{
+                db.get().collection(collections.CART_COLLECTION).updateOne({_id:objectId(details.cart),'foods.item':objectId(details.food)},
+                    {
+                        $inc :{'foods.$.quantity':count}
+                    }
+                    ).then(()=>{
+                        db.get().collection(collections.CART_COLLECTION).findOne({_id:objectId(details.cart),'foods.price':details.quantity*details._id})
+                        resolve()
+                    })
+            }
+            
+        })
+    },
+
+    //remove food
+    removeFood:(details)=>{
+        return new Promise(async(resolve,reject)=>{
+            
+            let cart = await db.get().collection(collections.CART_COLLECTION).findOne({_id:objectId(details.cart)})
+            if(cart){
+               db.get().collection(collections.CART_COLLECTION).updateOne({_id:objectId(details.cart)},{
+                   $pull:{foods:{item:objectId(details.food)}}
+               }).then(()=>{
+                  resolve({status:true})
+               })
+            }
+        })
+    },
+
+    getTotalAmount:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let order = await db.get().collection(collections.CART_COLLECTION).findOne({userId:objectId(userId)})
+            if(order){
+                let total = await db.get().collection(collections.CART_COLLECTION).aggregate([
+                    {
+                        $match:{userId:objectId(userId)}
+                    },
+                    {
+                        $unwind:'$foods'
+                    },
+                    {
+                        $project:{
+                            item:'$foods.item',
+                            quantity:'$foods.quantity',
+                            
+                            
+                        }
+                    },
+                    {
+                        $lookup:{
+                            from:collections.HOTELFOOD_COLLECTION,
+                            localField:'item',
+                            foreignField:'_id',
+                            as:"food"
+                        }
+                    },
+                    {
+                        $project:{
+                            userId:1,quantity:1,foods:{$arrayElemAt:['$food',0]}
+                        }
+                    },
+                    {
+                        $group:{
+                            _id:null,
+                            total:{$sum:{$multiply:['$quantity','$foods.price']}}
+                        }
+                    }
+                ]).toArray()
+
+                resolve(total[0].total)
+            }else{
+                resolve("0")
+            }
+            
+         })
+    }, 
+    placeOrder:(orderdetails,cartItems,total)=>{
+        return new Promise((resolve,reject)=>{
+            let n = orderdetails.food.length
+            
+            
+            let delivery = {}
+            // for (i=0;i<n;i++){
+            //  delivery.
+            // }
+
+            
+            let cartObj = {
+                userId:objectId(orderdetails.user),
+                hotelId:objectId(orderdetails.hid),
+                foods:cartItems,
+                total:total,
+                status:"0",
+                orderdetails  
+            }
+            db.get().collection(collections.FOODORDER_COLLECTION).insertOne(cartObj).then(()=>{
+                resolve()
+                // db.get().collection(collections.CART_COLLECTION).removeOne({userId:objectId(orderdetails.user)}).then(()=>{
+                //     resolve()
+                // })
+            })
+        })
+    },
+
+    //verify food payment
+    verifyFoodPayment:(paymentDetails)=>{
+        return new Promise((resolve,reject)=>{
+            const crypto=require('crypto')
+            let hmac = crypto.createHmac('sha256','T3nUEiAc1nQ8TC5PYYMTZiyw')
+            hmac.update(paymentDetails['payment[razorpay_order_id]']+'|'+paymentDetails['payment[razorpay_payment_id]'])
+            hmac=hmac.digest("hex")
+
+            if(hmac===paymentDetails['payment[razorpay_signature]']){
+                
+                resolve()
+            }else{
+                reject()
+            }
+        })
+    },
+    ChangeFoodStatus:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.FOODORDER_COLLECTION).findOne({userId:objectId(userId)}).then((order)=>{
+                
+                db.get().collection(collections.FOODORDER_COLLECTION).updateOne({userId:objectId(userId)},{$set:{
+                    status:"1"
+                }}).then(()=>{
+                    
+                    db.get().collection(collections.CART_COLLECTION).removeOne({userId:objectId(userId)}).then(()=>{
+                        resolve()
+                    })
+                    
+                })
+                
+               
+            })
+        })
+    },
+    getBookedFoods:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.FOODORDER_COLLECTION).find({userId:objectId(userId),status:"1"}).toArray().then((result)=>{
+                resolve(result)
+            })
+        })
+    },
+
+    getHotel:(userid)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ORDER_COLLECTION).findOne({uid:userid}).then((result)=>{
+                resolve(result)
+            })
+        })
     }
 
+    
 
 }

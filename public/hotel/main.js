@@ -16,4 +16,4 @@ function payment(hid,total,accno,ifsc,holder,branch){
            razorpayPayment(response) 
         }
     })   
-}
+} 

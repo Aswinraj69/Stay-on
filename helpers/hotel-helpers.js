@@ -174,6 +174,7 @@ module.exports={
     },
     addHotelFood:(foodDetails)=>{ 
         return new Promise((resolve,reject)=>{
+            foodDetails.price=parseInt(foodDetails.price)
             let food={
                 foodname:foodDetails.foodname,
                 restaurant:foodDetails.restaurant,
@@ -209,7 +210,9 @@ module.exports={
     },
     updateHotelFood:(HotelfoodDetails,id)=>{
         return new Promise((resolve,reject)=>{
+            HotelfoodDetails.price=parseInt(HotelfoodDetails.price)
             db.get().collection(collections.HOTELFOOD_COLLECTION).updateOne({_id:objectId(id)},{$set:{
+                
             foodname:HotelfoodDetails.foodname,
             price:HotelfoodDetails.price,
             restaurant:HotelfoodDetails.restaurant
@@ -223,8 +226,16 @@ module.exports={
     //get bookings
     getbookings:(hId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.ORDER_COLLECTION).find({hid:objectId(hId)}).toArray().then((bookings)=>{
-                resolve(bookings)
+            let response ={}
+            db.get().collection(collections.ORDER_COLLECTION).find({hid:objectId(hId),status:"1"}).toArray().then(async(bookings)=>{
+                response.rooms=bookings
+                let foods=await db.get().collection(collections.FOODORDER_COLLECTION).find({hotelId:objectId(hId),status:"1"}).toArray()
+                if(foods){
+                    response.foods=foods
+                    resolve(response)
+                }else{
+                    resolve(response)
+                }
             })
         })
     },
@@ -243,6 +254,56 @@ module.exports={
         return new Promise((resolve,reject)=>{
             db.get().collection(collections.REFUND_COLLECTION).findOne({_id:objectId(refundId)}).then((details)=>{
                 resolve(details)
+            })
+        })
+    },
+
+    //delivered food
+    changeFoodStatus:(foodId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.FOODORDER_COLLECTION).updateOne({_id:objectId(foodId)},{$set:{
+                status:"2"
+            }}).then((result)=>{
+                resolve()
+            })
+        })
+    },
+
+    //get delivered foods
+    getDeliveredFoods:(hotelId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.FOODORDER_COLLECTION).find({hotelId:objectId(hotelId),status:"2"}).toArray().then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+
+    //do chaeckout 
+    doCheckout:(orderId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(orderId)},{$set:{
+                status:"2"
+            }}).then(async()=>{
+                let order = await db.get().collection(collections.ORDER_COLLECTION).findOne({_id:objectId(orderId)})
+                db.get().collection(collections.ROOM_COLLECTION).updateOne({_id:objectId(order.rid)},{$set:{
+                    status:"0"
+                }}).then(()=>{
+                    db.get().collection(collections.FOODORDER_COLLECTION).remove({userId:objectId(order.uid)}).then(()=>{
+                        db.get().collection(collections.CHECKOUT_COLLECTION).insertOne(order).then(()=>{
+                            resolve()
+                        })
+                    })
+                    
+                })
+            })
+        })
+    },
+
+    //get the checkouted list
+    getCheckoutList:(hotelId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.CHECKOUT_COLLECTION).find({hid:objectId(hotelId)}).toArray().then((result)=>{
+                resolve(result)
             })
         })
     }

@@ -11,5 +11,7 @@ module.exports={
     PAYMENT_COLLECTION:'payment',
     ORDER_COLLECTION:'order',
     REFUND_COLLECTION:'refund',
-    CART_COLLECTION:'cart'
+    CART_COLLECTION:'cart',
+    FOODORDER_COLLECTION:'foodorder',
+    CHECKOUT_COLLECTION:'checkout'
 }

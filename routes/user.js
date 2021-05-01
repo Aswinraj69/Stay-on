@@ -1,4 +1,5 @@
 var express = require('express');
+const { Db } = require('mongodb');
 var router = express.Router();
 var userHelper=require('../helpers/user-helper');
 
@@ -78,13 +79,10 @@ router.get('/book-food',function(req,res,next){
 router.get('/room-details/:id',function(req,res,next){
     req.session.rid=req.params.id
     userHelper.roomDetails(req.params.id).then((result)=>{
-       
+            
             res.render('user/room-details',{user:true,roomdetails:result.room,hoteldetails:result.hotel,
                 food:result.food,userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr})
                 req.session.bookingErr=null
-                
-       
-        
         
     })
     
@@ -127,8 +125,9 @@ router.get('/confirm-booking', verifyLogin, function(req,res,next){
 })
 
 router.get('/razorpay/:id',verifyLogin,(req,res,next)=>{
-    console.log(req.params.id);
+    
     userHelper.createPaymentOrder(req.params.id,req.session.total).then((response)=>{
+        console.log("Iam here");
         let user=req.session.user
         res.json({response:response,user:user})
     })
@@ -166,13 +165,17 @@ router.post('/editprofile/:id',verifyLogin,function(req,res){
 
 //user profile
 router.get('/profile/:id',verifyLogin,(req,res,next)=>{
-    userHelper.bookedRooms(req.params.id).then((response)=>{
+    userHelper.bookedRooms(req.params.id).then(async(response)=>{
+        let foods = await userHelper.getBookedFoods(req.params.id)
+        
         var today=new Date()
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd +'/'+ mm +'/'+ yyyy;
-        res.render('user/profile',{user:true,userdetails:req.session.user,today,bookings:response})
+        
+        res.render('user/profile',{user:true,userdetails:req.session.user,today,bookings:response,foods})
+
     }).catch((err)=>{
         console.log(err);
         res.render('user/profile',{user:true,userdetails:req.session.user})
@@ -237,9 +240,21 @@ router.get('/contact',(req,res)=>{
 //foods
 router.get('/food',verifyLogin,(req,res)=>{
     userHelper.getFood(req.session.user._id).then((foods)=>{
-        userHelper.getCartItem(req.session.user._id).then((items)=>{
-            res.render('user/food',{user:true,userdetails:req.session.user,foods,items})
-        })
+        if(foods.status===false){
+            res.render('user/food',{user:true,userdetails:req.session.user,status:true,nofood:true})
+        }else{
+            userHelper.getCartItem(req.session.user._id).then((items)=>{
+                userHelper.getTotalAmount(req.session.user._id).then(async(total)=>{
+                    searchfood=req.session.searchFood
+                    noSearch=req.session.noSearch
+                    res.render('user/food',{user:true,userdetails:req.session.user,foods,items,total,searchfood,noSearch})
+                    req.session.searchFood=null
+                    req.session.noSearch=null
+                })
+               
+            })
+        }
+        
     })
     
 })
@@ -250,5 +265,81 @@ router.get('/add-food/:id',verifyLogin,(req,res)=>{
         res.redirect('/food')
     })
 })
+
+//change-food-quantity
+router.post('/change-food-quantity',(req,res)=>{
+    userHelper.changeFoodQuantity(req.body).then(()=>{
+        
+        res.json({status:true})
+    })
+})
+
+//remove food 
+router.post('/remove-food',(req,res)=>{
+    userHelper.removeFood(req.body).then((response)=>{
+        res.json(response)
+    })
+})
+
+//place order
+router.get('/order',verifyLogin,async(req,res)=>{
+    let cartItems = await userHelper.getCartItem(req.session.user._id)
+    let total = await userHelper.getTotalAmount(req.session.user._id)
+    let hotel = await userHelper.getHotel(req.session.user._id)
+    
+    res.render('user/place-order',{user:true,userdetails:req.session.user,cartItems,total,hotelDetail:hotel})
+})
+
+//post request for placing the order
+router.post('/order',async(req,res)=>{
+    let cartItems = await userHelper.getCartItem(req.session.user._id)
+    let total = await userHelper.getTotalAmount(req.session.user._id)
+   userHelper.placeOrder(req.body,cartItems,total)
+   res.redirect('/pay')
+})
+
+//payment for food
+router.get('/pay',verifyLogin,async(req,res)=>{
+    let total = await userHelper.getTotalAmount(req.session.user._id)
+    res.render('user/pay',{user:true,userdetails:req.session.user,total})
+})
+
+
+//razorpay new
+router.post('/razorpaynew/:id',verifyLogin,(req,res)=>{
+    userHelper.createPaymentFoodOrder(req.params.id,req.body.total).then((response)=>{
+        
+        let user=req.session.user
+        res.json({response:response,user:user})
+    })
+})
+
+//verify food-payment
+router.post('/verify-food-payment',verifyLogin,(req,res,next)=>{
+    
+    userHelper.verifyFoodPayment(req.body).then(()=>{
+        
+        userHelper.ChangeFoodStatus(req.body['order[receipt]']).then(()=>{
+            req.session.FoodBookingStatus=true
+            res.json({status:true})
+        })
+    }).catch((err)=>{
+        res.json({status:false})
+    })
+})
+
+//search food
+router.post('/search-food',verifyLogin,(req,res)=>{
+   userHelper.getSearchFood(req.body).then((result)=>{
+       if(result.status===false){
+           req.session.noSearch=true
+       }else{
+        req.session.searchFood = result
+       }
+     
+       res.redirect('/food')
+   })
+})
+
 
 module.exports = router;

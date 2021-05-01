@@ -120,16 +120,22 @@
                                                     <th scope="col">Food Name</th>
                                                     <th scope="col">Restaurant Name</th>
                                                     <th scope="col">Amount</th>
-                                                    <th></th>
+                                                 
+                                          
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                               {{#each foods}}
+                                                {{#each this.foods}}
                                                 <tr>
-                                                    <th scope="row">idili</th>
-                                                    <td>casinova</td>
-                                                    <td>200</td>
-                                                    <td><a class="btn btn-sm btn-primary" href="">Cancel</a></td>
+                                                    <th scope="row">{{this.foods.foodname}}</th>
+                                                    <td>{{foods.restaurant}}</td>
+                                                    <td>{{foods.price}}</td>
+                                                    
+                                                   
                                                 </tr>
+                                                {{/each}}
+                                                {{/each}}
                                             </tbody>
                                         </table>
                                     </div>
