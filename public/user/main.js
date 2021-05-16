@@ -4,7 +4,7 @@ function payment(userId){
         url:'/razorpay/'+userId,
         method:'get', 
         success:(response)=>{
-           razorpayRoomPayment(response) 
+           razorpayRoomPayment(response)  
         }
     })
 }

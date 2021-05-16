@@ -5,14 +5,18 @@
       <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
         <h1>Contact Us</h1>
         <h2>Feel free to contact us..</h2>
+        
         <div>
-          
+          {{#if contacted}}
+          <p class="alert alert-success" id="msg">Message sent successfully</p>
+          {{/if}}
         </div>
       </div>
       <div class="col-lg-6 order-1 order-lg-2 hero-img">
         <img src="/user/assets/images/contact.svg" class="img-fluid animated" alt="">
       </div>
     </div>
+    
   </div>
 
 </section><!-- End Hero -->
@@ -58,33 +62,30 @@
         </div>
 
         <div class="col-lg-5 col-md-12">
-          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+          <form action="/contact" method="post" >
             <div class="form-group">
-              <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4"
+              <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required data-rule="minlen:4"
                 data-msg="Please enter at least 4 chars" />
               <div class="validate"></div>
             </div>
             <div class="form-group">
-              <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
+              <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required
                 data-rule="email" data-msg="Please enter a valid email" />
               <div class="validate"></div>
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
+              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required
                 data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
               <div class="validate"></div>
             </div>
             <div class="form-group">
-              <textarea class="form-control" name="message" rows="5" data-rule="required"
+              <textarea class="form-control" name="message" rows="5" data-rule="required" required
                 data-msg="Please write something for us" placeholder="Message"></textarea>
               <div class="validate"></div>
             </div>
             <div class="mb-3">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
-            </div>
-            <div class="text-center"><button type="submit">Send Message</button></div>
+             
+            <div class="text-center"><button class="btn btn-primary">Send Message</button></div>
           </form>
         </div>
 
@@ -92,3 +93,9 @@
 
     </div>
   </section><!-- End Contact Section -->
+  
+<script>
+  setTimeout(function(){
+    $('#msg').css('display','none')
+  },1500)
+</script>

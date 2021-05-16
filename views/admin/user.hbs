@@ -31,29 +31,32 @@
                             
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered first">
+                                    <table class="table table-striped table-bordered first" id="data_table">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
                                                 <th>E-mail</th>
-                                                <th>Joined</th>
+                                                
                                                 <th>Contact</th>
-                                                <th>Actions</th>
+                                                <th class="text-center">Actions</th>
                                                 
                                             </tr>
                                         </thead>
                                         <tbody>
+                                              {{#each users}}
                                             <tr>
-                                                <td>koya</td>
-                                                <td>mommed@gmail.com</td>
-                                                <td>20.08.2000</td>
-                                                <td>987456321</td>
-                                                <td>
-                                                    <a class="btn btn-primary text-white" >Edit</a>
-                                                    <a class="btn btn-danger text-white">Delete</a>
+                                              
+                                                <td>{{this.name}}</td>
+                                                <td>{{this.username}}</td>
+                                                <td>{{this.mobile}}</td>
+                                                
+                                                <td class=" text-center">
+                                                    <a href="/admin/block-user/{{this._id}}" class="btn btn-warning btn-sm text-white" >Block</a>
+                                                    <a href="/admin/delete-user/{{this._id}}" class="btn btn-danger btn-sm text-white">Delete</a>
                                                 </td>
                                                 
                                             </tr>
+                                            {{/each}}
                                            
                                         </tbody>
                                         

@@ -1,5 +1,4 @@
 var express = require('express');
-const { Db } = require('mongodb');
 var router = express.Router();
 var userHelper=require('../helpers/user-helper');
 
@@ -7,7 +6,7 @@ const verifyLogin=(req,res,next)=>{
     if(req.session.userLoggedIn){
         next()
     }else{
-        res.redirect('/login')
+        res.redirect('/user')
     }
 }
 
@@ -30,7 +29,9 @@ router.get('/user',(req,res)=>{
     if(req.session.userLoggedIn){
         res.redirect('/')
     }else{
-        res.render('user/login',{layout:null});
+        res.render('user/login',{layout:null,passchanged:req.session.userPassChange,loginerr:req.session.userLoginErr});
+        req.session.userPassChange=null
+        req.session.userLoginErr=null
     }
 })
 
@@ -41,7 +42,8 @@ router.post('/login', function(req, res, next) {
             req.session.user=response.user
             res.redirect('/')
         }else{
-            res.redirect('/login')
+            req.session.userLoginErr=true
+            res.redirect('/user')
         }
     })
 });
@@ -49,15 +51,21 @@ router.get('/signup', function(req, res, next) {
     if(req.session.userLoggedIn){
         res.redirect('/')
     }else{
-        res.render('user/signup',{layout:null});
+        res.render('user/signup',{layout:null,userSignUpErr:req.session.userSignUpErr});
+        req.session.userSignUpErr=null
     }
 });
 router.post('/signup', function(req, res, next) {
     userHelper.userSignUp(req.body).then((response)=>{
-        console.log(response);
-        req.session.userLoggedIn=true
-        req.session.user=response
-        res.redirect('/')
+        if(response.status){
+            req.session.userLoggedIn=true
+            req.session.user=response
+            res.redirect('/')
+        }else{
+            req.session.userSignUpErr=true
+            res.redirect('/signup')
+        }
+       
     })
 });
 
@@ -78,11 +86,19 @@ router.get('/book-food',function(req,res,next){
 })
 router.get('/room-details/:id',function(req,res,next){
     req.session.rid=req.params.id
-    userHelper.roomDetails(req.params.id).then((result)=>{
-            
+    userHelper.roomDetails(req.params.id).then(async(result)=>{
+            let five = await userHelper.getFive(req.params.id)
+            let four = await userHelper.getFour(req.params.id)
+            let three = await userHelper.getThree(req.params.id)
+            let two = await userHelper.getTwo(req.params.id)
+            let one = await userHelper.getOne(req.params.id)
+            let rate = ((5*five)+(4*four)+(3*three)+(2*two)+(1*one))/10
+            let reviews = await userHelper.getReviews(req.params.id)
             res.render('user/room-details',{user:true,roomdetails:result.room,hoteldetails:result.hotel,
-                food:result.food,userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr})
+                food:result.food,userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr,
+                five,four,three,two,one,rate,rated:req.session.rated,reviews})
                 req.session.bookingErr=null
+                req.session.rated=null
         
     })
     
@@ -127,7 +143,7 @@ router.get('/confirm-booking', verifyLogin, function(req,res,next){
 router.get('/razorpay/:id',verifyLogin,(req,res,next)=>{
     
     userHelper.createPaymentOrder(req.params.id,req.session.total).then((response)=>{
-        console.log("Iam here");
+       
         let user=req.session.user
         res.json({response:response,user:user})
     })
@@ -234,7 +250,16 @@ router.get('/city-rooms/:id',(req,res)=>{
 
 //contact page
 router.get('/contact',(req,res)=>{
-    res.render('user/contact',{user:true,userdetails:req.session.user})
+    res.render('user/contact',{user:true,userdetails:req.session.user,contacted:req.session.contacted})
+    req.session.contacted=null
+})
+
+//contact post request
+router.post('/contact',(req,res)=>{
+    userHelper.contactAdmin(req.body).then(()=>{
+        req.session.contacted=true
+        res.redirect('/contact')
+    })
 })
 
 //foods
@@ -341,5 +366,94 @@ router.post('/search-food',verifyLogin,(req,res)=>{
    })
 })
 
+//rate the room
+router.post('/rate',verifyLogin,(req,res)=>{
+    userHelper.rateAndReview(req.body).then(()=>{
+        req.session.rated=true
+        res.redirect('/room-details/'+req.body.roomId)
+    })
+})
+
+//forgot password
+router.get('/forgot-pass',(req,res)=>{
+    res.render('user/forgot-pass',{layout:null,userotperr:req.session.userOtpErr})
+    req.session.userOtpErr=null
+})
+
+//post request for forgot password
+router.post('/forgot-pass',(req,res)=>{
+    userHelper.sentOtp(req.body).then((response)=>{
+        if (response.data.status) {
+          req.session.userMobile = response.data.to
+          req.session.userPassChanger = response.user
+          req.session.userOtpSent = true
+          res.redirect('/verify-otp')
+        } else {
+          req.session.userOtpErr = true
+          res.redirect('/forgot-pass')
+        }
+      })
+})
+
+//verify otp
+router.get('/verify-otp',(req,res)=>{
+    if(req.session.userOtpSent){
+        res.render('user/verify-otp',{layout:null,wronguserotp:req.session.wrongUserOtp})
+        req.session.wrongUserOtp=null
+    }else{
+        res.redirect('/forgot-pass')
+    }
+})
+
+//post request for otp
+router.post('/verify-otp',(req,res)=>{
+    userHelper.verifyOtp(req.session.userMobile,req.body).then((response)=>{
+        if (response.valid) {
+            req.session.verifiedUserOtp = true
+            res.redirect('/new-pass')
+        }else{
+            req.session.wrongUserOtp=true
+            res.redirect('/verify-otp')
+        }
+    })
+  })
+
+//neww password
+router.get('/new-pass',(req,res)=>{
+    if(req.session.verifiedUserOtp){
+        res.render('user/new-pass',{layout:null,details:req.session.userPassChanger})
+    }else{
+        res.render('error')
+    }
+    
+})
+
+
+//new password post request
+router.post('/new-pass',(req,res)=>{
+    userHelper.changeForgotPassword(req.body).then((response)=>{
+     if (response.status) {
+         req.session.userPassChange = true
+         res.redirect('/user')
+       } else {
+         req.session.userChangeErr = true
+         res.redirect('/new-pass')
+       }
+    })
+  })
+
+
+//change password
+router.post('/change-pass',verifyLogin,(req,res)=>{
+   userHelper.changePassword(req.body).then((response)=>{
+       console.log(response);
+        if(response.status){
+            res.json({status:true})
+        }else{
+            res.json({status:false})
+        }
+   })
+
+})
 
 module.exports = router;

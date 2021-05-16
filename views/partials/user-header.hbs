@@ -1,36 +1,129 @@
-<header id="header" class="fixed-top d-flex align-items-center " >
-    <div class="container d-flex align-items-center">
+<header id="header" class="fixed-top d-flex align-items-center ">
+  <div class="container d-flex align-items-center">
 
-      <div class="logo mr-auto">
-        <h1 class="text-light"><a href="/"><span>Stay <span class="text-primary">ON</span></span></a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+    <div class="logo mr-auto">
+      <h1 class="text-light"><a href="/"><span>Stay <span class="text-primary">ON</span></span></a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+    </div>
+
+    <nav class="nav-menu d-none d-lg-block">
+      <ul>
+        <li class="#"><a href="/">Home</a></li>
+        <li><a href="/food">Food</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+        {{#if userdetails}}
+        <li class="drop-down"><a href="#">Account</a>
+          <ul>
+            <li><a href="/profile/{{userdetails._id}}" class="icofont-ui-user"> Profile</a></li>
+            <li><a href="#" id="passwordchange" class="icofont-ui-lock"> Change Password</a></li>
+            <li><a href="/logout" class="icofont-logout"> Logout</a></li>
+
+          </ul>
+        </li>
+        {{/if}}
+
+        {{#if userdetails}}
+        <li class="get-started"><a href="#"><i class="icofont-ui-user"></i> {{userdetails.name}}</a></li>
+        {{else}}
+        <li class="get-started"><a href="/login">Login</a></li>
+        {{/if}}
+      </ul>
+    </nav><!-- .nav-menu -->
+
+  </div>
+</header><!-- End Header -->
+{{!-- change password modal --}}
+<div class="modal fade" id="changepassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" >
+          <div class="form-group">
+            <label for="password1" class="col-form-label">Old password</label>
+            <input type="password" name="password1" class="form-control" id="password1">
+            <input type="hidden" name="userId" value="{{userdetails._id}}" id="userId">
+          </div>
+          <div class="form-group">
+            <label for="password" class="col-form-label">New password (min 8 characters )</label>
+            <input type="password" name="password" class="form-control" id="password" minlength="8" maxlength="14" >
+          </div>
+          <div class="modal-footer">
+            <button  class="btn btn-dark" data-dismiss="modal">Cancel</button>
+            <a href="#" class="btn btn-success" id="change">Change</a>
+          </div>
+        </form>
       </div>
 
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          <li class="#"><a href="/">Home</a></li>
-          <li><a href="/food">Food</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="/contact">Contact</a></li>
-            {{#if userdetails}}
-          <li class="drop-down"><a href="#">Account</a>
-            <ul>
-              <li><a href="/profile/{{userdetails._id}}"class="icofont-ui-user"> Profile</a></li>
-              
-              <li><a href="/logout" class="icofont-logout"> Logout</a></li>
-              
-            </ul>
-          </li>
-          {{/if}}
-          
-        {{#if userdetails}}
-        <li class="get-started" ><a href="#"><i class="icofont-ui-user"></i> {{userdetails.name}}</a></li>
-        {{else}}
-          <li class="get-started"><a href="/login">Login</a></li>
-          {{/if}}
-        </ul>
-      </nav><!-- .nav-menu -->
-
     </div>
-  </header><!-- End Header -->
+  </div>
+</div>
+
+{{!-- password change confirmation --}}
+<div class="modal fade" id="changed" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      Password Changed successfully !
+      </div>
+      <div class="modal-footer">
+        <a type="button" href="#" class="btn btn-dark btn-sm" id="ok">Ok</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  $('#passwordchange').on('click', function () {
+    $('#changepassword').modal('show')
+  })
+
+  $('#change').on('click',function(){
+
+    let password1 = document.getElementById('password1').value
+    let password = document.getElementById('password').value
+    let userId = document.getElementById('userId').value
+    $.ajax({
+      url:'/change-pass',
+      data:{
+        password,
+        password1,
+        userId
+      },
+      method:'post',
+      success:(response)=>{
+        if(response.status){
+          $('#changepassword').modal('hide')
+          $("#changed").modal('show')
+          $('#ok').on('click',function(){
+            location.reload()
+          })
+          
+        }else{
+          alert("Invalid password")
+        }
+      }
+
+    })
+
+  })
+
+  
+</script>

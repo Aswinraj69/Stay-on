@@ -21,7 +21,7 @@
 <meta name="keywords" content="Sleek Login Form Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- //Meta-Tags -->
-
+<link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
 <!-- Style --> <link rel="stylesheet" href="/hotel/css/hotel-login.css" type="text/css" media="all">
 
 <!-- Fonts -->
@@ -35,8 +35,17 @@
 <body>
 
 	<h1>LOGIN</h1>
-
+	{{#if signedUp}}
+    <p class="m-2 text-warning h6">Successfully registered please wait for confirmation.</p>
+	{{else if passchanged}}
+	<p class="m-2 text-warning h6">Password changed Successfully</p>
+	{{else if HotelLoginErr}}
+	<p class="m-2 text-danger h6">Invalid username / password</p>
+	{{else}}
 	<h2>Log in to your Account</h2>
+    {{/if}}
+	
+
 	<div class="w3layoutscontaineragileits">
 		<form action="/hotel" method="post">
 			<input type="text" name="username" placeholder="EMAIL" required="">
@@ -44,8 +53,8 @@
 			
 			<div class="aitssendbuttonw3ls">
 				<input type="submit" value="LOGIN" style="background: #ffffff; color:rgb(0, 0, 0);">
-				<p><a href="#">REQUEST FOR REGISTER <span>→</span></a></p>
-				<div class="clear"></div>
+				<p><a href="/hotel/signup">REQUEST FOR REGISTER <span>→</span></a></p>
+				<div class=" mt-5"> <a href="/hotel/forgot-pass" class="text-white text-left"> Forgot password</a></div>
 			</div>
 		</form>
 	</div>

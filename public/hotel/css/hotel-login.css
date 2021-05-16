@@ -99,6 +99,41 @@ input[type="text"], input[type="password"] {
 	color: #FFF;
 }
 
+input[type="file"] {
+	width: 84%;
+	padding: 15px 10px 15px 50px;
+	font-size: 14px;
+	background: transparent;
+	border: 2px solid #FFF;
+	border-radius: 5px;
+	outline: none;
+	margin-bottom: 20px;
+	color: #FFF;
+}
+input[type="file"] {
+	width: 84%;
+	padding: 15px 10px 15px 50px;
+	font-size: 14px;
+	background: transparent;
+	border: 2px solid #FFF;
+	border-radius: 5px;
+	outline: none;
+	margin-bottom: 20px;
+	color: #FFF;
+}
+
+input[type="number"] {
+	width: 84%;
+	padding: 15px 10px 15px 50px;
+	font-size: 14px;
+	background: transparent;
+	border: 2px solid #FFF;
+	border-radius: 5px;
+	outline: none;
+	margin-bottom: 20px;
+	color: #FFF;
+}
+
 input[type="text"] {
 	background: url("../images/mail.png") no-repeat 13px 11px;
 	background-size: 25px;

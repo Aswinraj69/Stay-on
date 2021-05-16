@@ -1,0 +1,61 @@
+<!--
+	Author: W3layouts
+	Author URL: http://w3layouts.com
+	License: Creative Commons Attribution 3.0 Unported
+	License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+
+
+
+<!DOCTYPE html>
+<html>
+
+<!-- Head -->
+<head>
+
+<title>Hotel | Login</title>
+
+<!-- Meta-Tags -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="keywords" content="Sleek Login Form Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //Meta-Tags -->
+<link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+<!-- Style --> <link rel="stylesheet" href="/hotel/css/hotel-login.css" type="text/css" media="all">
+
+<!-- Fonts -->
+<link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<!-- //Fonts -->
+
+</head>
+<!-- //Head -->
+
+<!-- Body -->
+<body>
+
+	<h1></h1>
+	{{#if signedUp}}
+    <p class="m-2 text-warning h6">Successfully registered please wait for confirmation.</p>
+	{{else}}
+	<h2>Enter new Password</h2>
+    {{/if}}
+	
+
+	<div class="w3layoutscontaineragileits">
+		<form action="/hotel/new-pass" method="post">
+			<input type="password" name="password" placeholder="password (min 8 characters)" required="">
+			<input type="hidden" name="hotelId" value="{{details._id}}">
+			
+			<div class="aitssendbuttonw3ls">
+				<button class="btn btn-white btn-lg">Change</button>
+			</div>
+		</form>
+	</div>
+
+	
+
+</body>
+<!-- //Body -->
+
+</html>

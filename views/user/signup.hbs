@@ -36,27 +36,31 @@
 					<span class="login100-form-logo">
 						<i class="zmdi zmdi-landscape"></i>
 					</span>
-
+					{{#if userSignUpErr}}
+					<p class="text-danger text-center bg-white  m-2">Username not available</p>
+					{{else}}
 					<span class="login100-form-title p-b-34 p-t-27">
 						Register
 					</span>
+					{{/if}}
                     <div class="wrap-input100 validate-input" data-validate = "Enter Fullname">
 						<input class="input100" type="text" name="name" placeholder="Name">
 						<span class="focus-input100" data-placeholder="&#xf207;"></span>
 					</div>
 					<div class="wrap-input100 validate-input" data-validate = "Enter username">
 						<input class="input100" type="email" name="username" placeholder="Username">
-						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+						<span class="focus-input100" data-placeholder="&#x2709;"></span>
 					</div>
                     
 
 					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<input class="input100" type="password" name="password" placeholder="Password">
+						<input class="input100" type="password" name="password" placeholder="Password (min 8-14 Characters)" minlength="8" maxlength="14">
 						<span class="focus-input100" data-placeholder="&#xf191;"></span>
 					</div>
                     <div class="wrap-input100 validate-input" data-validate="Enter Mobile">
 						<input class="input100" type="tel" name="mobile" placeholder="mobile">
-						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+							<input type="hidden" name="block" value="0">
+						<span class="focus-input100" data-placeholder="&#x260E;"></span>
 					</div>
 						
 					<div class="container-login100-form-btn">
@@ -66,7 +70,7 @@
 					</div>
 
 					<div class="text-center p-t-90">
-						<a class="txt1" href="/login">
+						<a class="txt1" href="/user">
 							Already Registered? Login
 						</a>
 					</div>

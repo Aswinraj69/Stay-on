@@ -13,7 +13,7 @@
                         <div class="page-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="hotel/profile"
+                                    <li class="breadcrumb-item"><a href="/hotel/profile"
                                             class="breadcrumb-link">Profile</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">
                                     </li>
@@ -33,7 +33,7 @@
                 <!-- ============================================================== -->
                 <!-- profile -->
                 <!-- ============================================================== -->
-                <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
+                <div class="col-md-4">
                     <!-- ============================================================== -->
                     <!-- card profile -->
                     <!-- ============================================================== -->
@@ -56,20 +56,17 @@
                                     <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{hotel.username}}
                                     </li>
                                     <li class="mb-2"><i class="fas fa-fw fa-phone mr-2"></i>{{hotel.mobile}}</li>
-                                    <li class="mb-0"><i class="fas fa-fw fa-home mr-2"></i>{{hotel.hoteladdress}}</li>
+                                    <li class="mb-2"><i class="fas fa-fw fa-home mr-2"></i>{{hotel.hoteladdress}}</li>
+                                    <li class="mb-0"><i class="fa fa-fw fa-map-marker mr-2"></i>{{hotel.city}}</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="card-body border-top">
                             <h3 class="font-16">Rating</h3>
-                            <h1 class="mb-0">4.8</h1>
+                            <h1 class="mb-0 badge badge-success"><span class="h4">{{total_rating}} <span class="fa fa-star h6 "></span></span> </h1>
                             <div class="rating-star">
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <i class="fa fa-fw fa-star"></i>
-                                <p class="d-inline-block text-dark">14 Reviews </p>
+                                
+                                <p class="d-inline-block text-dark">{{reviews}} Reviews </p>
                             </div>
                         </div>
                         <div class="card-body border-top">
@@ -102,13 +99,7 @@
                     <!-- end card profile -->
                     <!-- ============================================================== -->
                 </div>
-                <!-- ============================================================== -->
-                <!-- end profile -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- campaign data -->
-                <!-- ============================================================== -->
-                <div class="col-xl-9 col-lg-9 col-md-7 col-sm-12 col-12">
+                <div class="col-md-8">
                     <!-- ============================================================== -->
                     <!-- campaign tab one -->
                     <!-- ============================================================== -->
@@ -123,7 +114,7 @@
                                 </div>
                                 <div class="row">
                                     {{#each profile}}
-                                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="col-md-4">
                                         <!-- .card -->
                                         <div class="card card-figure">
                                             <!-- .card-figure -->
@@ -165,6 +156,13 @@
                     <!-- end campaign tab one -->
                     <!-- ============================================================== -->
                 </div>
+                <!-- ============================================================== -->
+                <!-- end profile -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- campaign data -->
+                <!-- ============================================================== -->
+                
                 <!-- ============================================================== -->
                 <!-- end campaign data -->
                 <!-- ============================================================== -->

@@ -33,7 +33,7 @@
                         <div class="card">  
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered first">
+                                    <table class="table table-striped table-bordered first" id="data_table">
                                         <thead>
                                             <tr>
                                                 <th> Hotel Name</th>
@@ -42,7 +42,7 @@
                                                 <th>Contact</th>
                                                 <th>Address</th>
                                                 <th>Image</th>
-                                                <th>Actions</th>
+                                                <th class="text-center">Actions</th>
                                                 
                                             </tr>
                                         </thead>
@@ -55,9 +55,10 @@
                                                 <td>{{this.mobile}}</td>
                                                 <td>{{this.hoteladdress}}</td>
                                                 <td><img src="/hotel/hotel-images/{{this._id}}.jpg" alt="" style="width: 80px; height:80px;"></td>
-                                                <td>
-                                                    <a href="/admin/edithotel/{{this._id}}" class="btn btn-primary text-white" >Edit</a>
-                                                    <a href="/admin/deletehotel/{{this._id}}"class="btn btn-danger text-white">Delete</a>
+                                                <td class="text-center">
+                                                    <a href="/admin/edithotel/{{this._id}}" class="btn btn-primary btn-xs text-white" >Edit</a>
+                                                    <a href="/admin/blockhotel/{{this._id}}" class="btn btn-warning btn-xs text-white" >Block</a>
+                                                    <a href="/admin/deletehotel/{{this._id}}"class="btn btn-danger btn-xs text-white">Delete</a>
                                                 </td>
                                                 
                                             </tr>

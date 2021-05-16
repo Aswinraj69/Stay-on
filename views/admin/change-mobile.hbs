@@ -1,0 +1,55 @@
+<div class="dashboard-wrapper mt-5">
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+
+                    <h2 class="pageheader-title">Change Mobile</h2>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link"></a></li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 ml-auto mr-auto">
+            <div class="card">
+                <h5 class="card-header">Change Mobile</h5>
+               
+                <div class="card-body">
+                    {{#if changeFail}}
+                     <p class="text-center text-danger">Invalid password please try again.</p>
+                     {{/if}}
+                     {{#if changed}}
+                      <p class="text-center alert alert-success ">Mobile changed successfully</p>
+                     {{/if}}
+                    <form action="/admin/change-mobile" method="post" >
+                        <div class="form-group m-3 ">
+                            <div class="col-md-12">
+                                <input name="mobile" type="tel" required="" placeholder="New mobile" class="form-control">
+                                <input type="hidden" name="aid" value="{{adminDetails._id}}">
+                            </div>
+                        </div>
+                        <div class="form-group m-3">
+                            <div class="col-md-12">
+                                <input name="password" type="password" required="" placeholder="Password" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-right ">
+                                <a href="/admin/home" class="btn btn-space btn-dark">Cancel</a>
+                                <button type="submit" class="btn btn-space btn-success">Change</button>
+                            </p>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

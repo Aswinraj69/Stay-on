@@ -13,5 +13,7 @@ module.exports={
     REFUND_COLLECTION:'refund',
     CART_COLLECTION:'cart',
     FOODORDER_COLLECTION:'foodorder',
-    CHECKOUT_COLLECTION:'checkout'
+    CHECKOUT_COLLECTION:'checkout',
+    RATING_COLLECTION:'rating',
+    CONTACT_COLLECTION:'contact'
 }
