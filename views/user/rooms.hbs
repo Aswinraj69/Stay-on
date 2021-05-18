@@ -10,7 +10,7 @@
 
     </div>
 </section>
-<div class="container ">
+<div class="container " >
     <div class="col-md-12">
         {{#if rooms}}
         {{#each rooms}}
@@ -27,17 +27,10 @@
                         </div>
                         <div class="pl-xl-3">
                             <div class="m-b-0">
-                                <div class="user-avatar-name d-inline-block">
-                                    <h2 class="font-24 m-b-10">{{this.roomname}}</h2>
+                                <div class=" d-inline-block" >
+                                    <h2 class="font-24 m-b-10" style="font-family:alegreya;">{{this.roomname}}</h2>
                                 </div>
-                                <div class="rating-star d-inline-block pl-xl-2 mb-2 mb-xl-0">
-                                    <i class="fa fa-fw fa-star"></i>
-                                    <i class="fa fa-fw fa-star"></i>
-                                    <i class="fa fa-fw fa-star"></i>
-                                    <i class="fa fa-fw fa-star"></i>
-                                    <i class="fa fa-fw fa-star"></i>
-                                    <p class="d-inline-block text-dark">14 Reviews </p>
-                                </div>
+                                
                             </div>
                             <div class="user-avatar-address">
                                 <p class="mb-2"><i class="fa fa-map-marker-alt mr-2  text-primary"></i>{{this.city}}
@@ -53,7 +46,7 @@
                     </div>
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
-                            <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a>
+                            
                             <a href="/room-details/{{this._id}}" class="btn btn-info">View</a>
                         </div>
 

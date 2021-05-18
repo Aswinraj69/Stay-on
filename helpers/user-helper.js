@@ -690,8 +690,19 @@ module.exports = {
 
     rateAndReview: (rateAndReview) => {
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collections.RATING_COLLECTION).insertOne(rateAndReview).then(() => {
-                resolve()
+            db.get().collection(collections.RATING_COLLECTION).insertOne(rateAndReview).then(async() => {
+                let rooms = await db.get().collection(collections.RATING_COLLECTION).find({hotelId:rateAndReview.hotelId}).toArray()
+                let rating = 0
+                rooms.forEach(element => {
+                     rating = parseInt(element.rate)+rating
+                });
+                rating = rating/10
+                db.get().collection(collections.HOTELS_COLLECTION).updateOne({_id:objectId(rateAndReview.hotelId)},{$set:{
+                    rate:rating
+                }}).then(()=>{
+                    resolve()
+                })
+                
             })
         })
     },
