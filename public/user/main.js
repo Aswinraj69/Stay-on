@@ -353,6 +353,3 @@ var BrowserDetect = {
 };
 
 //handling food to cart
-function addFood(foodId){
-  
-}

@@ -94,9 +94,11 @@ router.get('/room-details/:id',function(req,res,next){
             let one = await userHelper.getOne(req.params.id)
             let rate = ((5*five)+(4*four)+(3*three)+(2*two)+(1*one))/10
             let reviews = await userHelper.getReviews(req.params.id)
+            let dates = await userHelper.getDates(req.params.id)
+            
             res.render('user/room-details',{user:true,roomdetails:result.room,hoteldetails:result.hotel,
                 food:result.food,userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr,
-                five,four,three,two,one,rate,rated:req.session.rated,reviews})
+                five,four,three,two,one,rate,rated:req.session.rated,reviews,dates})
                 req.session.bookingErr=null
                 req.session.rated=null
         
@@ -151,11 +153,8 @@ router.get('/razorpay/:id',verifyLogin,(req,res,next)=>{
 
 router.post('/verify-payment',verifyLogin,(req,res,next)=>{
     userHelper.verifyPayment(req.body).then(()=>{
-        
-        userHelper.ChangeRoomStatus(req.body['order[receipt]']).then(()=>{
-            req.session.bookingStatus=true
-            res.json({status:true})
-        })
+        req.session.bookingStatus=true
+        res.json({status:true})
     }).catch((err)=>{
         res.json({status:false})
     })

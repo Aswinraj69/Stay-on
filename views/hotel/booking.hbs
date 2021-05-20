@@ -165,19 +165,14 @@
 
                     
                     <table class="table-responsive table table-striped table-bordered first">
-                        <thead>
-                            <th>Customer</th>
-                            <th>Food</th>
-                            <th>Restaurant</th>
-
-                        </thead>
+                      
                         <tbody>
                             {{#each foods}}
                             <tr>
-                                <td>{{this.orderdetails.customername}}</td>
+                                
                                 {{#each this.foods}}
-                                <td>{{this.foods.foodname}}</td>
-                                <td>{{this.foods.restaurant}}</td>
+                                <th>{{this.foods.foodname}}</td>
+                                <td>From : <span class="font-weight-bold">{{this.foods.restaurant}}</span></td>
                                 {{/each}}
                             </tr>
                             {{/each}}

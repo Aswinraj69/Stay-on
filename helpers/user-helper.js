@@ -1,6 +1,7 @@
 const collections = require('../config/collections')
 const db = require('../config/connection')
 const bcrypt = require('bcrypt')
+const moment = require('moment')
 const objectId = require('mongodb').ObjectID
 const Razorpay = require('razorpay')
 const SmsNoify = require('../config/smsNotify')
@@ -73,7 +74,7 @@ module.exports = {
     },
     getrooms: (id) => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collections.ROOM_COLLECTION).find({ hid: id, status: "0" }).toArray().then((result) => {
+            db.get().collection(collections.ROOM_COLLECTION).find({ hid: id }).toArray().then((result) => {
                 resolve(result)
             })
         })
@@ -314,20 +315,7 @@ module.exports = {
             }
         })
     },
-    ChangeRoomStatus: (userId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collections.ORDER_COLLECTION).findOne({ uid: userId }).then((order) => {
-                db.get().collection(collections.ROOM_COLLECTION).updateOne({ _id: objectId(order.rid) }, {
-                    $set: {
-                        status: "1"
-                    }
-                }).then(() => {
-                    resolve()
-                })
-
-            })
-        })
-    },
+    
     //user-profile update
     updateProfile: (userId, userdetails) => {
         return new Promise((resolve, reject) => {
@@ -752,6 +740,40 @@ module.exports = {
             db.get().collection(collections.RATING_COLLECTION).find({ roomId: roomId }).toArray().then((result) => {
                 resolve(result)
             })
+        })
+    },
+
+    //get dates
+    getDates:(roomId)=>{
+        return new Promise(async(resolve,reject)=>{
+           let rooms = await db.get().collection(collections.ORDER_COLLECTION).find({rid:objectId(roomId)}).toArray()
+           let dates = []
+           const format2 = "YYYY-MM-DD"
+           rooms.forEach(element => {
+            console.log(element.checkin);
+            console.log(element.checkout);
+            let startDate = moment(new Date(element.checkin));
+            let end = moment(new Date(element.checkout));
+            let endDate = end.add(1,'days')
+            let day1 = moment(startDate).format(format2)
+            dates.push(day1)
+            
+            startDate.add(1, 'days');
+            
+        
+            while(startDate.format('M/D/YYYY') !== endDate.format('M/D/YYYY')) {
+              
+                let day =  moment(startDate).format(format2)
+              dates.push(day);
+              
+              startDate.add(1, 'days');
+            }
+            
+           
+         });
+         console.log(dates);
+          resolve(dates)  
+      
         })
     },
 

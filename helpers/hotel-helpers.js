@@ -338,7 +338,10 @@ module.exports = {
                 }).then(() => {
                     db.get().collection(collections.FOODORDER_COLLECTION).remove({ userId: objectId(order.uid) }).then(() => {
                         db.get().collection(collections.CHECKOUT_COLLECTION).insertOne(order).then(() => {
-                            resolve()
+                            db.get().collection(collections.ORDER_COLLECTION).removeOne({_id:objectId(orderId)}).then(()=>{
+                                resolve()
+                            })
+                            
                         })
                     })
 
