@@ -171,12 +171,7 @@ router.post('/editprofile/:id',verifyLogin,function(req,res){
     })
 })
 
-// router.post('/searchfood',function(req,res){
-//    userHelper.getSearchFood(req.body).then((foods)=>{
-//     req.session.foods=foods
-//    res.json(foods)
-//    }) 
-//   })
+
 
 //user profile
 router.get('/profile/:id',verifyLogin,(req,res,next)=>{
@@ -198,7 +193,7 @@ router.get('/profile/:id',verifyLogin,(req,res,next)=>{
     
 })
 
-//cancl booking
+//cancel booking
 router.get('/cancel-booking/:id',verifyLogin,(req,res,next)=>{
     userHelper.getTotal(req.params.id).then((total)=>{
         res.render('user/refund',{user:true,userdetails:req.session.user,bookId:req.params.id,total})
@@ -369,6 +364,7 @@ router.post('/search-food',verifyLogin,(req,res)=>{
 router.post('/rate',verifyLogin,(req,res)=>{
     userHelper.rateAndReview(req.body).then(()=>{
         req.session.rated=true
+        req.session.rateNotify=true
         res.redirect('/room-details/'+req.body.roomId)
     })
 })

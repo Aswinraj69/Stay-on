@@ -16,7 +16,8 @@ router.get('/', function (req, res, next) {
   if (req.session.hotelLoggedIn) {
     res.redirect('/hotel/home')
   } else {
-    res.render('hotel/login', { layout: null,signedUp:req.session.signedUp,passchanged: req.session.hotelPassChange,HotelLoginErr:req.session.HotelLoginErr });
+    res.render('hotel/login', { layout: null,signedUp:req.session.signedUp,
+      passchanged: req.session.hotelPassChange,HotelLoginErr:req.session.HotelLoginErr });
     req.session.hotelPassChange=null
     req.session.HotelLoginErr=null
     req.session.signedUp=null
@@ -45,10 +46,10 @@ router.get('/home',async function (req, res, next) {
     let active_bookings = await hotelHelper.getActiveBookings(req.session.hotel._id)
     let rooms_available = await hotelHelper.getAvailableRooms(req.session.hotel._id)
     let bookings = await hotelHelper.getAllBookings(req.session.hotel._id)
-    res.render('hotel/index', { hotel: true, hotel: req.session.hotel,
+    res.render('hotel/index', { hotel: true, hotel: req.session.hotel,ratedNotify:req.session.rateNotify,title:"Home",
       bookingStatus:req.session.bookingStatus,
       cancelStatus:req.session.cancelStatus,total_bookings,total_rooms,active_bookings,rooms_available,bookings});
-    req.session.bookingStatus=null
+    
     
   } else {
     res.redirect('/hotel')
@@ -68,9 +69,9 @@ router.get('/profile/:id', function (req, res, next) {
     hotelHelper.getHotel(req.params.id).then(async(profile) => {
       let total_rating = await hotelHelper.getTotalRating(req.params.id)
       let reviews = await hotelHelper.getNoOfReview(req.params.id)
-      res.render('hotel/hotelprofile', {total_rating,reviews, hotel: true, hotel: req.session.hotel, profile ,
-        bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus  });
-      req.session.bookingStatus=null
+      res.render('hotel/hotelprofile', {total_rating,reviews, hotel: true, hotel: req.session.hotel, profile ,ratedNotify:req.session.rateNotify,
+        bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus,title:"Profile"  });
+      
     })
 
   } else {
@@ -81,7 +82,7 @@ router.get('/profile/:id', function (req, res, next) {
 router.get('/editprofile/:id', function (req, res) {
   if (req.session.hotelLoggedIn) {
     hotelHelper.editProfile(req.params.id).then((hotelDetails) => {
-      res.render('hotel/editprofile', { hotel: true, hotelDetails, hotel: req.session.hotel,cancelStatus:req.session.cancelStatus  });
+      res.render('hotel/editprofile', { hotel: true, hotelDetails,title:"Edit profile", hotel: req.session.hotel,cancelStatus:req.session.cancelStatus  });
     })
 
   } else {
@@ -100,8 +101,9 @@ router.post('/editprofile/:id', function (req, res) {
 router.get('/rooms', function (req, res) {
   if (req.session.hotelLoggedIn) {
     hotelHelper.getRooms(req.session.hotel._id).then((rooms) => {
-      res.render('hotel/rooms', { hotel: true, rooms, hotel: req.session.hotel ,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus  })
-      req.session.bookingStatus=null
+      res.render('hotel/rooms', { hotel: true, rooms, hotel: req.session.hotel ,bookingStatus:req.session.bookingStatus,
+        ratedNotify:req.session.rateNotify,cancelStatus:req.session.cancelStatus,title:"Rooms"  })
+      
     })
   } else {
     res.redirect('/hotel')
@@ -110,7 +112,7 @@ router.get('/rooms', function (req, res) {
 })
 router.get('/addrooms', function (req, res) {
   if (req.session.hotelLoggedIn) {
-    res.render('hotel/add-rooms', { hotel: true, hotel: req.session.hotel })
+    res.render('hotel/add-rooms', { hotel: true, hotel: req.session.hotel ,title:"Add rooms"})
   } else {
     res.redirect('/hotel')
   }
@@ -121,10 +123,10 @@ router.get('/food', function (req, res) {
     hotelHelper.getFoodCategory(req.session.hotel._id).then((category) => {
       hotelHelper.getAllFood(req.session.hotel._id).then((food) => {
         hotelHelper.getHotelFood(req.session.hotel._id).then((hotelfoods) => {
-          res.render('hotel/food', { hotel: true, hotel: req.session.hotel, categories: category, food: food, hotelfoods
+          res.render('hotel/food', { hotel: true,ratedNotify:req.session.rateNotify, hotel: req.session.hotel, categories: category, food: food, hotelfoods
              ,bookingStatus:req.session.bookingStatus
-            ,cancelStatus:req.session.cancelStatus  })
-          req.session.bookingStatus=null
+            ,cancelStatus:req.session.cancelStatus,title:"Foods",  })
+          
         })
 
       })
@@ -136,30 +138,30 @@ router.get('/food', function (req, res) {
   }
 
 })
-router.get('/addfood', function (req, res) {
-  if (req.session.hotelLoggedIn) {
-    hotelHelper.getCategory().then((categories) => {
-      res.render('hotel/add-food', { hotel: true, hotel: req.session.hotel, categories })
-    })
+// router.get('/addfood', function (req, res) {
+//   if (req.session.hotelLoggedIn) {
+//     hotelHelper.getCategory().then((categories) => {
+//       res.render('hotel/add-food', { hotel: true, hotel: req.session.hotel, categories,title:"Add food" })
+//     })
 
-  } else {
-    res.redirect('/hotel')
-  }
+//   } else {
+//     res.redirect('/hotel')
+//   }
 
-})
-router.post('/addfood', function (req, res) {
-  hotelHelper.addFood(req.body).then((id) => {
-    res.redirect('/hotel/food')
-    if (req.files) {
-      let image = req.files.image
-      image.mv('./public/hotel/food-images/' + id + '.jpg')
-    }
-  })
+// // })
+// router.post('/addfood', function (req, res) {
+//   hotelHelper.addFood(req.body).then((id) => {
+//     res.redirect('/hotel/food')
+//     if (req.files) {
+//       let image = req.files.image
+//       image.mv('./public/hotel/food-images/' + id + '.jpg')
+//     }
+//   })
 
-})
+// })
 router.get('/addfoodcategory', function (req, res) {
   if (req.session.hotelLoggedIn) {
-    res.render('hotel/add-food-category', { hotel: true, hotel: req.session.hotel })
+    res.render('hotel/add-food-category', { hotel: true, hotel: req.session.hotel,title:"food category" })
   } else {
     res.redirect('/hotel')
   }
@@ -193,7 +195,7 @@ router.post('/addrooms', function (req, res) {
   router.get('/editroom/:id', function (req, res) {
     if (req.session.hotelLoggedIn) {
       hotelHelper.editRoom(req.params.id).then((room) => {
-        res.render('hotel/editroom', { hotel: true, room, hotel: req.session.hotel })
+        res.render('hotel/editroom', { hotel: true, room, hotel: req.session.hotel,title:"Edit room" })
       })
     } else {
       res.redirect('/hotel')
@@ -228,24 +230,24 @@ router.get('/deleteroom/:id', function (req, res) {
 
 })
 
-router.get('/editfood/:id', verifyLogin, function (req, res) {
-  hotelHelper.showFood(req.params.id).then((fooddetails) => {
-    hotelHelper.getCategory().then((categories) => {
-      res.render('hotel/editfood', { hote: true, hotel: req.session.hotel, fooddetails, categories })
-    })
+// router.get('/editfood/:id', verifyLogin, function (req, res) {
+//   hotelHelper.showFood(req.params.id).then((fooddetails) => {
+//     hotelHelper.getCategory().then((categories) => {
+//       res.render('hotel/editfood', { hote: true, hotel: req.session.hotel, fooddetails, categories,title:"Edit food", })
+//     })
 
-  })
-})
-router.post('/editfood/:id', function (req, res) {
-  hotelHelper.updateFood(req.body, req.params.id).then(() => {
-    if (req.files) {
-      let image = req.files.image
-      image.mv('./public/hotel/food-images/' + req.params.id + '.jpg')
-    }
-    res.redirect('/hotel/food')
-  })
+//   })
+// })
+// router.post('/editfood/:id', function (req, res) {
+//   hotelHelper.updateFood(req.body, req.params.id).then(() => {
+//     if (req.files) {
+//       let image = req.files.image
+//       image.mv('./public/hotel/food-images/' + req.params.id + '.jpg')
+//     }
+//     res.redirect('/hotel/food')
+//   })
 
-})
+// })
 router.get('/deletefood/:id', function (req, res) {
   hotelHelper.deleteFood(req.params.id).then(() => {
     res.redirect('/hotel/food')
@@ -259,7 +261,7 @@ router.get('/deletecategory/:id', function (req, res) {
 
 router.get('/addhotelfood', verifyLogin, function (req, res, next) {
   hotelHelper.getCategory().then((categories) => {
-    res.render('hotel/hotelfood', { hotel: true, hotel: req.session.hotel, categories })
+    res.render('hotel/hotelfood', { hotel: true, hotel: req.session.hotel, categories ,title:"Add Hotel Food",})
   })
 })
 
@@ -276,7 +278,7 @@ router.post('/addhotelfood/', function (req, res) {
 router.get('/edithotelfood/:id', verifyLogin, function (req, res) {
   hotelHelper.editHotelFood(req.params.id).then((result) => {
     hotelHelper.getCategory().then((categories) => {
-      res.render('hotel/edit-hotel-food', { hotel: true, hotel: req.session.hotel, foods: result, category: categories })
+      res.render('hotel/edit-hotel-food', { hotel: true, hotel: req.session.hotel, foods: result, category: categories,title:"Edit hotel food" })
     })
 
   })
@@ -303,8 +305,9 @@ router.get('/booking/:id', verifyLogin, (req, res) => {
   hotelHelper.getbookings(req.params.id).then((bookings) => {
     
     res.render('hotel/booking', { hotel: true, bookings: bookings.rooms, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus,
-                                        foods:bookings.foods  })
-    req.session.bookingStatus=null
+                                        foods:bookings.foods,FoodBookingStatus:req.session.FoodBookingStatus,ratedNotify:req.session.rateNotify ,title:"Bookings", })
+   req.session.bookingStatus=null
+    req.session.FoodBookingStatus=null
   })
 
 })
@@ -314,8 +317,8 @@ router.get('/refund/:id',verifyLogin,(req,res)=>{
   hotelHelper.refund(req.params.id).then(async(refunds)=>{
     let refunded = await hotelHelper.getRefunded(req.params.id)
     res.render('hotel/refund',{hotel:true, hotel: req.session.hotel,refunds,bookingStatus:req.session.bookingStatus 
-      ,cancelStatus:req.session.cancelStatus,refunded })
-    req.session.bookingStatus=null
+      ,cancelStatus:req.session.cancelStatus,refunded ,ratedNotify:req.session.rateNotify,title:"Refund"})
+    
   })
   
 })
@@ -329,8 +332,9 @@ router.get('/deposit/:id',verifyLogin,(req,res)=>{
     }else{
       req.session.cancelStatus=null
     }
-    res.render('hotel/deposit',{hotel:true, hotel:req.session.hotel,details,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus })
-    req.session.bookingStatus=null
+    res.render('hotel/deposit',{hotel:true, ratedNotify:req.session.rateNotify,hotel:req.session.hotel,details,
+      title:"Deposit",bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus })
+    
     req.session.cancelStatus=null
   })
   
@@ -372,7 +376,7 @@ router.get('/food-delivered/:id',verifyLogin,(req,res)=>{
 router.get('/delivered-food/:id',verifyLogin,async(req,res)=>{
   let delivered_foods = await hotelHelper.getDeliveredFoods(req.params.id)
   res.render('hotel/delivered-food',{hotel: true, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus
-    ,cancelStatus:req.session.cancelStatus,foods:delivered_foods})
+    ,cancelStatus:req.session.cancelStatus,foods:delivered_foods,title:"Delivered foods",ratedNotify:req.session.rateNotify})
 })
 
 //checkout rooms
@@ -386,13 +390,13 @@ router.get('/checkout/:id',verifyLogin,(req,res)=>{
 router.get('/checkout-history/:id',verifyLogin,async(req,res)=>{
   let bookings = await hotelHelper.getCheckoutList(req.params.id)
   res.render('hotel/checkout-history',{hotel: true, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus
-    ,cancelStatus:req.session.cancelStatus,bookings})
+    ,cancelStatus:req.session.cancelStatus,bookings,title:"Checkout history",ratedNotify:req.session.rateNotify})
 })
 
 //change password
 router.get('/change-password/:id',verifyLogin,(req,res)=>{
   res.render('hotel/change-password',{hotel: true, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus
-    ,cancelStatus:req.session.cancelStatus,changeFail:req.session.passChangeErr,passChanged: req.session.hotelPassChange})
+    ,cancelStatus:req.session.cancelStatus,changeFail:req.session.passChangeErr,title:"Change password",passChanged: req.session.hotelPassChange})
     req.session.passChangeErr=null
     req.session.hotelPassChange=null
 })
@@ -417,7 +421,7 @@ router.get('/signup',(req,res)=>{
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = dd +'/'+ mm +'/'+ yyyy;
-  res.render('hotel/signup',{layout:null,signupErr:req.session.SignupErr,today})
+  res.render('hotel/signup',{layout:null,signupErr:req.session.SignupErr,today,title:"Signup"})
   req.session.signupErr=null
 })
 
@@ -444,13 +448,14 @@ router.post('/signup',(req,res)=>{
 router.get('/rating/:id',verifyLogin,async(req,res)=>{
   let reviews = await hotelHelper.getReviews(req.params.id)
   res.render('hotel/rating',{hotel: true, hotel: req.session.hotel,bookingStatus:req.session.bookingStatus
-    ,cancelStatus:req.session.cancelStatus,reviews})
+    ,cancelStatus:req.session.cancelStatus,reviews,ratedNotify:req.session.rateNotify,title:"Ratings"})
+    req.session.rateNotify=null
 })
 
 
 //forgot password
 router.get('/forgot-pass',(req,res)=>{
-  res.render('hotel/forgot-pass',{layout:null, otperr:req.session.hotelOtpErr})
+  res.render('hotel/forgot-pass',{layout:null, otperr:req.session.hotelOtpErr,title:"Forgot password"})
   req.session.hotelOtpEr=null
 })
 
@@ -472,7 +477,7 @@ router.post('/forgot-pass',(req,res)=>{
 //verify otp
 router.get('/verify-otp',(req,res)=>{
   if(req.session.hotelOtpSent){
-    res.render('hotel/verify-otp',{layout:null,wrongotp: req.session.wrongHotelOtp})
+    res.render('hotel/verify-otp',{layout:null,wrongotp: req.session.wrongHotelOtp,title:"Verify OTP"})
     req.session.wrongHotelOtp=null
   }else{
     res.redirect('/hotel/forgot-pass')
@@ -496,7 +501,7 @@ router.post('/verify-otp',(req,res)=>{
 //for new password
 router.get('/new-pass',(req,res)=>{
   if(req.session.verifiedHotelOtp){
-    res.render('hotel/new-pass',{layout:null,details: req.session.hotelPassChanger})
+    res.render('hotel/new-pass',{layout:null,details: req.session.hotelPassChanger,title:"New password"})
   }else{
     res.render('/error')
   }
