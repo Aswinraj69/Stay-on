@@ -5,7 +5,6 @@ module.exports={
     ROOM_COLLECTION:'rooms',
     USER_COLLECTION:'user',
     FOOD_CATEGORY:'food_category',
-    FOOD_COLLECTION:'food',
     BOOKING_COLLECTION:'book',
     HOTELFOOD_COLLECTION:'hotelfood',
     PAYMENT_COLLECTION:'payment',

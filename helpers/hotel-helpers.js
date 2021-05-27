@@ -141,49 +141,11 @@ module.exports = {
             })
         })
     },
-    addFood: (foodDetails) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collections.FOOD_COLLECTION).insertOne(foodDetails).then((result) => {
-                resolve(result.ops[0]._id)
-            })
-        })
-    },
-    getAllFood: (hid) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collections.FOOD_COLLECTION).find({ hid: objectId(hid) }).toArray().then((result) => {
-                resolve(result)
-            })
-        })
-    },
-    showFood: (id) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collections.FOOD_COLLECTION).findOne({ _id: objectId(id) }).then((result) => {
-                resolve(result)
-            })
-        })
-    },
+    
+   
+    
 
-    updateFood: (foodDetails, id) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collections.FOOD_COLLECTION).updateOne({ _id: objectId(id) }, {
-                $set: {
-                    price: foodDetails.price,
-                    foodname: foodDetails.foodname,
-                    category: foodDetails.category,
-                    package: foodDetails.package
-                }
-            }).then((result) => {
-                resolve(result)
-            })
-        })
-    },
-    deleteFood: (id) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collections.FOOD_COLLECTION).removeOne({ _id: objectId(id) }).then((result) => {
-                resolve(result)
-            })
-        })
-    },
+
     deleteCategory: (id) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collections.FOOD_CATEGORY).removeOne({ _id: objectId(id) }).then((result) => {

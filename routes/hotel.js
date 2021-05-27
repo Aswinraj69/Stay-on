@@ -121,15 +121,15 @@ router.get('/addrooms', function (req, res) {
 router.get('/food', function (req, res) {
   if (req.session.hotelLoggedIn) {
     hotelHelper.getFoodCategory(req.session.hotel._id).then((category) => {
-      hotelHelper.getAllFood(req.session.hotel._id).then((food) => {
+      
         hotelHelper.getHotelFood(req.session.hotel._id).then((hotelfoods) => {
-          res.render('hotel/food', { hotel: true,ratedNotify:req.session.rateNotify, hotel: req.session.hotel, categories: category, food: food, hotelfoods
+          res.render('hotel/food', { hotel: true,ratedNotify:req.session.rateNotify, hotel: req.session.hotel, categories: category, hotelfoods
              ,bookingStatus:req.session.bookingStatus
             ,cancelStatus:req.session.cancelStatus,title:"Foods",  })
           
         })
 
-      })
+     
 
     })
 
@@ -138,27 +138,7 @@ router.get('/food', function (req, res) {
   }
 
 })
-// router.get('/addfood', function (req, res) {
-//   if (req.session.hotelLoggedIn) {
-//     hotelHelper.getCategory().then((categories) => {
-//       res.render('hotel/add-food', { hotel: true, hotel: req.session.hotel, categories,title:"Add food" })
-//     })
 
-//   } else {
-//     res.redirect('/hotel')
-//   }
-
-// // })
-// router.post('/addfood', function (req, res) {
-//   hotelHelper.addFood(req.body).then((id) => {
-//     res.redirect('/hotel/food')
-//     if (req.files) {
-//       let image = req.files.image
-//       image.mv('./public/hotel/food-images/' + id + '.jpg')
-//     }
-//   })
-
-// })
 router.get('/addfoodcategory', function (req, res) {
   if (req.session.hotelLoggedIn) {
     res.render('hotel/add-food-category', { hotel: true, hotel: req.session.hotel,title:"food category" })
@@ -230,29 +210,6 @@ router.get('/deleteroom/:id', function (req, res) {
 
 })
 
-// router.get('/editfood/:id', verifyLogin, function (req, res) {
-//   hotelHelper.showFood(req.params.id).then((fooddetails) => {
-//     hotelHelper.getCategory().then((categories) => {
-//       res.render('hotel/editfood', { hote: true, hotel: req.session.hotel, fooddetails, categories,title:"Edit food", })
-//     })
-
-//   })
-// })
-// router.post('/editfood/:id', function (req, res) {
-//   hotelHelper.updateFood(req.body, req.params.id).then(() => {
-//     if (req.files) {
-//       let image = req.files.image
-//       image.mv('./public/hotel/food-images/' + req.params.id + '.jpg')
-//     }
-//     res.redirect('/hotel/food')
-//   })
-
-// })
-router.get('/deletefood/:id', function (req, res) {
-  hotelHelper.deleteFood(req.params.id).then(() => {
-    res.redirect('/hotel/food')
-  })
-})
 router.get('/deletecategory/:id', function (req, res) {
   hotelHelper.deleteCategory(req.params.id).then(() => {
     res.redirect('/hotel/food')
