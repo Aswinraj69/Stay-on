@@ -331,6 +331,7 @@ router.get('/deposit/:id',verifyLogin,(req,res)=>{
     }
     res.render('hotel/deposit',{hotel:true, hotel:req.session.hotel,details,bookingStatus:req.session.bookingStatus,cancelStatus:req.session.cancelStatus })
     req.session.bookingStatus=null
+    req.session.cancelStatus=null
   })
   
 })

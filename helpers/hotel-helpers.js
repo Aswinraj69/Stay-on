@@ -584,7 +584,8 @@ module.exports = {
     //get all bookings
     getTotalBookings:(hotelId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collections.ORDER_COLLECTION).find({hid:objectId(hotelId)}).toArray().then((result)=>{
+            db.get().collection(collections.CHECKOUT_COLLECTION).find({hid:objectId(hotelId)}).toArray().then((result)=>{
+                
                 let n = result.length
                 resolve(n)
             })
