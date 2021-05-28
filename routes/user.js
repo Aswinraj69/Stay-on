@@ -97,7 +97,7 @@ router.get('/room-details/:id',function(req,res,next){
             let dates = await userHelper.getDates(req.params.id)
             
             res.render('user/room-details',{user:true,roomdetails:result.room,hoteldetails:result.hotel,
-                food:result.food,userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr,
+                userdetails:req.session.user,foods:req.session.foods,bookingErr:req.session.bookingErr,
                 five,four,three,two,one,rate,rated:req.session.rated,reviews,dates})
                 req.session.bookingErr=null
                 req.session.rated=null
@@ -128,7 +128,7 @@ router.get('/confirm-booking', verifyLogin, function(req,res,next){
         let days=milliseconds/day
         let total=days*roomprice
         
-         let foodDetails=await userHelper.getfoodDetails(req.session.user._id)
+        //  let foodDetails=await userHelper.getfoodDetails(req.session.user._id)
         var today=new Date()
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!

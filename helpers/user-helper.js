@@ -86,11 +86,10 @@ module.exports = {
                 response.room = result
                 db.get().collection(collections.HOTELS_COLLECTION).findOne({ _id: objectId(result.hid) }).then((hotelDetails) => {
                     response.hotel = hotelDetails
-                    db.get().collection(collections.FOOD_COLLECTION).find({ hid: result.hid }).toArray().then((food) => {
-                        response.food = food
+                    
                         resolve(response)
                     })
-                })
+               
             })
         })
     },
@@ -152,33 +151,33 @@ module.exports = {
             })
         })
     },
-    getfoodDetails: (uId) => {
-        return new Promise(async (resolve, reject) => {
-            let foodItems = await db.get().collection(collections.BOOKING_COLLECTION).aggregate([
-                {
-                    $match: { uid: uId }
-                },
-                {
-                    $lookup: {
-                        from: collections.FOOD_COLLECTION,
-                        let: { foodList: [objectId("5fef09688a397c2f4cb9f858"), objectId("5ff023784fa4da06205b278d")] },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $in: ['$_id', "$$foodList"]
-                                    }
-                                }
-                            }
-                        ],
-                        as: 'foodItems'
-                    }
-                }
-            ]).toArray()
+    // getfoodDetails: (uId) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         let foodItems = await db.get().collection(collections.BOOKING_COLLECTION).aggregate([
+    //             {
+    //                 $match: { uid: uId }
+    //             },
+    //             {
+    //                 $lookup: {
+    //                     from: collections.FOOD_COLLECTION,
+    //                     let: { foodList: [objectId("5fef09688a397c2f4cb9f858"), objectId("5ff023784fa4da06205b278d")] },
+    //                     pipeline: [
+    //                         {
+    //                             $match: {
+    //                                 $expr: {
+    //                                     $in: ['$_id', "$$foodList"]
+    //                                 }
+    //                             }
+    //                         }
+    //                     ],
+    //                     as: 'foodItems'
+    //                 }
+    //             }
+    //         ]).toArray()
 
-            resolve(foodItems)
-        })
-    },
+    //         resolve(foodItems)
+    //     })
+    // },
     getFood: (userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collections.ORDER_COLLECTION).findOne({ uid: userId, status: "1" }).then((result) => {
