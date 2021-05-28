@@ -252,6 +252,7 @@ router.get('/contact',(req,res)=>{
 router.post('/contact',(req,res)=>{
     userHelper.contactAdmin(req.body).then(()=>{
         req.session.contacted=true
+        req.session.contactedAdmin=true
         res.redirect('/contact')
     })
 })

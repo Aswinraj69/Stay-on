@@ -57,7 +57,11 @@
                                 </li>
                                 <li class="nav-item">
 
-                                    <a class="nav-link" href="/admin/hotel-request">Hotel Request</a>
+                                    <a class="nav-link" href="/admin/hotel-request">Hotel Request 
+                                     {{#if signedUp}}
+                                    <sup><i class="badge-dot badge-danger"></i></sup>
+                                    {{/if}}
+                                    </a>
 
                                 </li>
                                 <li class="nav-item">
@@ -76,7 +80,7 @@
                                     <a class="nav-link" href="/admin/blocked-users">Blocked Users</a>
 
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item"> 
 
                                     <a class="nav-link" href="/admin/rooms">Rooms</a>
 
@@ -88,7 +92,10 @@
                                 </li>
                                 <li class="nav-item">
 
-                                    <a class="nav-link" href="/admin/feedbacks">Feedbacks & Contact </a>
+                                    <a class="nav-link" href="/admin/feedbacks">Feedbacks & Contact 
+                                    {{#if contactedAdmin}}
+                                    <sup><i class="badge-dot badge-danger"></i></sup>
+                                    {{/if}}</a>
 
                                 </li>
 

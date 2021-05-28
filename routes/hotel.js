@@ -387,6 +387,7 @@ router.post('/signup',(req,res)=>{
   hotelHelper.signUp(req.body).then((response)=>{
     if(response.status){
       req.session.signedUp=true
+      req.session.hotelSignedUp=true
       if(req.files){
         let image=req.files.image
          image.mv('./public/hotel/hotel-images/'+response.hotel._id+'.jpg')

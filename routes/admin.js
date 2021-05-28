@@ -42,7 +42,8 @@ router.get('/home',async function(req, res, next) {
     let total_rooms = await adminHelper.getAllRooms()
     let active_hotels = await adminHelper.getActiveHotels()
     let hotels = await adminHelper.getLimitedHotels()
-    res.render('admin/index',{admin:true,total_hotels,total_users,total_rooms,active_hotels, hotels});
+    res.render('admin/index',{admin:true,total_hotels,total_users,total_rooms,active_hotels, hotels,signedUp:req.session.hotelSignedUp
+    ,contactedAdmin:req.session.contactedAdmin});
     
   }else{
     res.redirect('/admin')
@@ -53,7 +54,7 @@ router.get('/hotels', function(req, res, next) {
   if(req.session.adminLoggedIn){
     adminHelper.getHotels().then((hotels)=>{
      
-      res.render('admin/hotels',{admin:true,hotels:hotels});
+      res.render('admin/hotels',{admin:true,hotels:hotels,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin});
     })
     
   }else{ 
@@ -63,7 +64,7 @@ router.get('/hotels', function(req, res, next) {
 router.get('/users', async function(req, res, next) {
   if(req.session.adminLoggedIn){
     let users = await adminHelper.getAllUsers()
-    res.render('admin/user',{admin:true,users});
+    res.render('admin/user',{admin:true,users,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin});
   }else{
     res.redirect('/admin')
   }
@@ -80,7 +81,7 @@ router.get('/block-user/:id',verifyLogin,(req,res)=>{
 //blockedusers
 router.get('/blocked-users',verifyLogin,async(req,res)=>{
   let users = await adminHelper.getBlockedUsers()
-  res.render('admin/blocked-users',{admin:true,users})
+  res.render('admin/blocked-users',{admin:true,users,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
 })
 
 //unblock users
@@ -107,7 +108,7 @@ router.get('/addhotels',function(req,res,next){
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = dd +'/'+ mm +'/'+ yyyy;
-      res.render('admin/add-hotels',{admin:true,date:today,city})
+      res.render('admin/add-hotels',{admin:true,date:today,city,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
     })
    
   }else{
@@ -138,7 +139,7 @@ router.get('/city',function(req,res){
 })
 router.get('/addcity',function(req,res){
   if(req.session.adminLoggedIn){
-    res.render('admin/addcity',{admin:true})
+    res.render('admin/addcity',{admin:true,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
   }else{
     res.redirect('/admin')
   }
@@ -181,7 +182,7 @@ router.post('/editcity/:id',function(req,res){
 router.get('/edithotel/:id',function(req,res){
   if(req.session.adminLoggedIn){
     adminHelper.editHotel(req.params.id).then((hotels)=>{
-      res.render('admin/edithotel',{admin:true,hotels})
+      res.render('admin/edithotel',{admin:true,hotels,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
     })
     
   }else{
@@ -212,13 +213,14 @@ router.get('/deletecity/:id',function(req,res){
 //hotel requests
 router.get('/hotel-request',verifyLogin,async(req,res)=>{
   let requests = await adminHelper.getAllRequests()
-  res.render('admin/hotel-requests',{admin:true,requests})
+  res.render('admin/hotel-requests',{admin:true,requests,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
 })
 
 
 //accept hotel
 router.get('/accepthotel/:id',verifyLogin,(req,res)=>{
   adminHelper.acceptHotel(req.params.id).then(()=>{
+    req.session.hotelSignedUp=null
     res.redirect('/admin/hotel-request')
   })
 })
@@ -226,6 +228,7 @@ router.get('/accepthotel/:id',verifyLogin,(req,res)=>{
 //reject hotel
 router.get('/rejecthotel/:id',verifyLogin,(req,res)=>{
   adminHelper.rejectHotel(req.params.id).then(()=>{
+    req.session.hotelSignedUp=null
     res.redirect('/admin/hotel-request')
   })
 })
@@ -241,7 +244,7 @@ router.get('/blockhotel/:id',verifyLogin,(req,res)=>{
 //blocked hotels
 router.get('/blocked-hotels',verifyLogin,async(req,res)=>{
   let hotels = await adminHelper.getBlockedHotels()
-  res.render('admin/blocked-hotels',{admin:true,hotels})
+  res.render('admin/blocked-hotels',{admin:true,hotels,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
 })
 
 //unblock hotel
@@ -254,13 +257,13 @@ router.get('/unblockhotel/:id',verifyLogin,(req,res)=>{
 //show rooms
 router.get('/rooms',async(req,res)=>{
   let rooms = await adminHelper.getRooms()
-  res.render('admin/rooms',{admin:true,rooms})
+  res.render('admin/rooms',{admin:true,rooms,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
 })
 
 //change password
 router.get('/change-password',verifyLogin,(req,res)=>{
   res.render('admin/change-password',{admin:true,adminDetails:req.session.admin,changeFail:req.session.adminPassFail
-    ,passchanged:req.session.adminPassChanged})
+    ,passchanged:req.session.adminPassChanged,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
   req.session.adminPassFail=null
   req.session.adminPassChanged=null
 })
@@ -283,7 +286,7 @@ router.post('/change-password',verifyLogin,(req,res)=>{
 //change mobile number
 router.get('/change-mobile',verifyLogin,(req,res)=>{
   res.render('admin/change-mobile',{admin:true,adminDetails:req.session.admin,changed:req.session.adminNumChanged
-    ,changeFail:req.session.adminNumChangeFail})
+    ,changeFail:req.session.adminNumChangeFail,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
     req.session.adminNumChanged=null
     req.session.adminNumChangeFail=null
 })
@@ -304,7 +307,8 @@ router.post('/change-mobile',verifyLogin,(req,res)=>{
 //feedbacks
 router.get('/feedbacks',verifyLogin,async(req,res)=>{
   let contacts = await adminHelper.getFeedbacks()
-  res.render('admin/feedbacks',{admin:true,contacts})
+  res.render('admin/feedbacks',{admin:true,contacts,signedUp:req.session.hotelSignedUp,contactedAdmin:req.session.contactedAdmin})
+  req.session.contactedAdmin=null
 })
 
 module.exports = router;
