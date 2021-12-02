@@ -3,11 +3,9 @@ const db = require('../config/connection')
 const bcrypt = require('bcrypt')
 const objectId = require('mongodb').ObjectID
 const Razorpay = require('razorpay')
-const SmsNoify = require('../config/smsNotify')
-const twilio = require('twilio')
-let otpAuth = require('../config/otpauth');
-//for sending sms
-const client = new twilio(SmsNoify.accountSId, SmsNoify.authToken);
+require('dotenv').config()
+const client = require('twilio')(process.env.ACCOUNTSID,process.env.AUTHTOKEN)
+
 
 //for sendingotp
 
@@ -261,15 +259,7 @@ module.exports = {
                 let foodDetails = await db.get().collection(collections.FOODORDER_COLLECTION).findOne({ _id: objectId(foodId) })
                 let user = await db.get().collection(collections.USER_COLLECTION).findOne({ _id: objectId(foodDetails.userId) })
 
-                client.messages
-                    .create({
-                        body: 'Your booked food is out of delivery. ',
-                        from: '+19182057325',
-                        to: "+91" + user.mobile
-                    }).then((msg) => {
-
-                        resolve()
-                    })
+                resolve()
 
             })
         })
@@ -366,14 +356,7 @@ module.exports = {
                 let refund = await db.get().collection(collections.REFUND_COLLECTION).findOne({ _id: objectId(refundId) })
                 let user = await db.get().collection(collections.USER_COLLECTION).findOne({ _id: objectId(refund.userId) })
                
-                client.messages
-                    .create({
-                        body: 'Amount have been refunded. -Stay On',
-                        from: '+19182057325',
-                        to: "+91" + user.mobile
-                    }).then((msg) => {
-                        resolve()
-                    })
+                resolve()
                
             })
         })
@@ -424,19 +407,9 @@ module.exports = {
                         } else {
                             db.get().collection(collections.HOTELS_COLLECTION).insertOne(details).then(() => {
                                 db.get().collection(collections.HOTELS_COLLECTION).findOne({ username: details.username }).then(async (hotelresult) => {
-                                    let admin = await db.get().collection(collections.ADMIN_COLLECTION).findOne()
-
-                                    client.messages
-                                        .create({
-                                            body: 'A hotel have been requested.',
-                                            from: '+19182057325',
-                                            to: "+91" + admin.mobile
-                                        }).then((msg) => {
-                                            response.hotel = hotelresult
-                                            response.status = true
-                                            resolve(response)
-                                        })
-
+                                    response.hotel = hotelresult
+                                    response.status = true
+                                    resolve(response)
                                 })
 
                             })
@@ -488,7 +461,7 @@ module.exports = {
             if(hotel){
                 client
                     .verify
-                    .services(otpAuth.serviceID)
+                    .services(process.env.SERVICEID)
                     .verifications
                     .create({
                         to:"+91" + mobile.mobile,
@@ -512,7 +485,7 @@ module.exports = {
           
             client
                 .verify
-                .services(otpAuth.serviceID)
+                .services(process.env.SERVICEID)
                 .verificationChecks
                 .create({
                     to:mobile,

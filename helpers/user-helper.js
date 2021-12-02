@@ -4,10 +4,9 @@ const bcrypt = require('bcrypt')
 const moment = require('moment')
 const objectId = require('mongodb').ObjectID
 const Razorpay = require('razorpay')
-const SmsNoify = require('../config/smsNotify')
-const twilio = require('twilio')
-let otpAuth = require('../config/otpauth');
-const client = new twilio(SmsNoify.accountSId, SmsNoify.authToken);
+require('dotenv').config()
+const client = require('twilio')(process.env.ACCOUNTSID,process.env.AUTHTOKEN)
+
 
 var instance = new Razorpay({
     key_id: 'rzp_test_BTPYMRVQAXV143',
@@ -151,33 +150,7 @@ module.exports = {
             })
         })
     },
-    // getfoodDetails: (uId) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         let foodItems = await db.get().collection(collections.BOOKING_COLLECTION).aggregate([
-    //             {
-    //                 $match: { uid: uId }
-    //             },
-    //             {
-    //                 $lookup: {
-    //                     from: collections.FOOD_COLLECTION,
-    //                     let: { foodList: [objectId("5fef09688a397c2f4cb9f858"), objectId("5ff023784fa4da06205b278d")] },
-    //                     pipeline: [
-    //                         {
-    //                             $match: {
-    //                                 $expr: {
-    //                                     $in: ['$_id', "$$foodList"]
-    //                                 }
-    //                             }
-    //                         }
-    //                     ],
-    //                     as: 'foodItems'
-    //                 }
-    //             }
-    //         ]).toArray()
-
-    //         resolve(foodItems)
-    //     })
-    // },
+    
     getFood: (userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collections.ORDER_COLLECTION).findOne({ uid: userId, status: "1" }).then((result) => {
@@ -286,26 +259,7 @@ module.exports = {
                     orders.hid = hotel._id
                     db.get().collection(collections.ORDER_COLLECTION).insertOne(orders).then(() => {
                         db.get().collection(collections.BOOKING_COLLECTION).removeOne({ uid: userId }).then(() => {
-                            //message sending for the hotel 
-                            client.messages
-                                .create({
-                                    body: 'You have a booking.',
-                                    from: '+19182057325',
-                                    to: "+91" + hotel.mobile
-                                }).then(async (msg) => {
-                                    //message sending to user as a conirmation sms
-                                    let user = await db.get().collection(collections.USER_COLLECTION).findOne({ _id: objectId(userId) })
-
-                                    client.messages
-                                        .create({
-                                            body: 'YOUR BOOkING HAVE BEEN CONFIRMED. CHECK YOUR PROFILE FOR MORE DETAILS. -STAY ON  ',
-                                            from: '+19182057325',
-                                            to: "+91" + user.mobile
-                                        }).then((msg) => {
-
-                                            resolve()
-                                        })
-                                })
+                            resolve()
                         })
                     })
                 })
@@ -371,16 +325,8 @@ module.exports = {
             let hotel = await db.get().collection(collections.ORDER_COLLECTION).findOne({ _id: objectId(bookId) })
             refundDetails.hid = hotel.hid
             db.get().collection(collections.REFUND_COLLECTION).insertOne(refundDetails).then(() => {
-                client.messages
-                    .create({
-                        body: 'A customer had cancelled their booking. You have a refund request.',
-                        from: '+19182057325',
-                        to: "+91" + hotel.mobile
-                    }).then((msg) => {
-
-                        resolve()
-                    })
                 resolve()
+                
             })
         })
     },
@@ -588,10 +534,7 @@ module.exports = {
             let n = orderdetails.food.length
 
 
-            let delivery = {}
-            // for (i=0;i<n;i++){
-            //  delivery.
-            // }
+           
 
 
             let cartObj = {
@@ -625,15 +568,7 @@ module.exports = {
                 let cart = await db.get().collection(collections.CART_COLLECTION).findOne({ userId: objectId(userId) })
 
                 let hotel = await db.get().collection(collections.HOTELS_COLLECTION).findOne({ _id: objectId(cart.hotelId) })
-                client.messages
-                    .create({
-                        body: 'You have a Food order.',
-                        from: '+19182057325',
-                        to: "+91" + hotel.mobile
-                    }).then((msg) => {
-
-                        resolve()
-                    })
+                resolve()
             } else {
                 reject()
             }
@@ -793,7 +728,7 @@ module.exports = {
             if(user){
                 client
                     .verify
-                    .services(otpAuth.serviceID)
+                    .services(process.env.SERVICEID)
                     .verifications
                     .create({
                         to:"+91" + mobile.mobile,
@@ -817,7 +752,7 @@ module.exports = {
           
             client
                 .verify
-                .services(otpAuth.serviceID)
+                .services(process.env.SERVICEID)
                 .verificationChecks
                 .create({
                     to:mobile,

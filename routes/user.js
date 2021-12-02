@@ -58,8 +58,9 @@ router.get('/signup', function(req, res, next) {
 router.post('/signup', function(req, res, next) {
     userHelper.userSignUp(req.body).then((response)=>{
         if(response.status){
+            console.log(response);
             req.session.userLoggedIn=true
-            req.session.user=response
+            req.session.user=response.user
             res.redirect('/')
         }else{
             req.session.userSignUpErr=true
